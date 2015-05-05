@@ -50,6 +50,7 @@ void TDImage::setSource(const char* path, float customWidth, float customHeight)
 }
 
 void TDImage::initWidthConf(xml_node<> * pItem){
+	TDPanel::initWidthConf(pItem);
     string path;
     readAttrString(pItem, "Image", path);
 	Size size=readContainSize(pItem, getParent());

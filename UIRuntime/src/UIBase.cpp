@@ -163,13 +163,24 @@ void splitStr(vector<string> &gRet, string cStr ,const char* cSplit ){
 }
 
 
+bool existAttr(xml_node<> * pItem, const char* cAttr) {
+	if (!cAttr)
+		return false;
+	xml_attribute<> * pNode = pItem->first_attribute(cAttr);
+	if (!pNode)
+		return false;
+	return true;
+}
+
+
+
 bool readAttrBool(xml_node<> * pItem, const char* cAttr) {
 	if (!cAttr)
-		return 0;
+		return false;
 
 	xml_attribute<> * pNode = pItem->first_attribute(cAttr);
 	if (!pNode)
-		return 0;
+		return false;
 
 	char * v = pNode->value();
 	if (strcmp("TRUE", v) == 0 || strcmp("true", v) == 0) {
@@ -200,8 +211,6 @@ void readAttrString(xml_node<> * pItem,const char* cAttr, string & ret){
     ret = "";
 	if(!cAttr)
 		return;
-    
-    
 	xml_attribute<> * pNode = pItem->first_attribute(cAttr);
     
     
@@ -325,4 +334,3 @@ long getTimer()
 	//return (a * 1000 + now.tv_usec / 1000);
 	return 0;
 }
-

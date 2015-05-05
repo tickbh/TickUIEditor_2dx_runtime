@@ -80,7 +80,7 @@ void TDPanel::setX(float x){
 }
 void TDPanel::setY(float y){
 	if (_parent){
-        setPositionY(_parent->getContentSize().height - this->getContentSize().height - y);
+        setPositionY(_parent->getContentSize().height - y);
 		//setPositionY(_parent->getContentSize().height - y);
 		//setPositionY(-y);
 		//setPositionY(_parent->getContentSize().height - y);
@@ -179,6 +179,7 @@ void TDPanel::loadConf(const string& path, Node* parent /*= NULL*/){
 		return;
     
 	initConf(pRoot, parent);
+	this->setAnchorPoint(Vec2(0, 0));
 	//child node
 	xml_node<> * pItem = pRoot->first_node("Child");
 	if (pItem) {
@@ -237,6 +238,15 @@ void TDPanel::initWidthConf(xml_node<> * pItem){
 		setScale(readAttrFloat(pItem, "Scale"));
 	}
 
+	pNode = pItem->first_attribute("AnchorX");
+	if (pNode) {
+		setAnchorPoint(Vec2(readAttrFloat(pItem, "AnchorX"), getAnchorPoint().y));
+	}
+
+	pNode = pItem->first_attribute("AnchorY");
+	if (pNode) {
+		setAnchorPoint(Vec2(getAnchorPoint().x, readAttrFloat(pItem, "AnchorY")));
+	}
 
 	pNode = pItem->first_attribute("Top");
 	if (pNode) {
@@ -302,7 +312,6 @@ void TDPanel::parseConf(xml_node<> * pItem){
     }
 }
 
-
 TDPanel* TDPanel::getUI(const string& key){
 	auto iter = gUIs.find(key);
 	if (iter == gUIs.end()){
@@ -310,8 +319,6 @@ TDPanel* TDPanel::getUI(const string& key){
     }
 	return iter->second;
 }
-
-
 
 void TDPanel::onExit(){
     Node::onExit();
@@ -332,7 +339,7 @@ bool TDPanel::init(){
 	if (!Node::init()) {
 		return false;
 	}
-	setAnchorPoint(Vec2(0, 0));
+	setAnchorPoint(Vec2(0.5, 0.5));
 	setCascadeOpacityEnabled(true);
     return true;
 }
