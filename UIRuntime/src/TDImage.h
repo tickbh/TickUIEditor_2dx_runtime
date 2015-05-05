@@ -10,9 +10,7 @@ public:
     TDImage();
     
     static TDImage*  create(xml_node<> * pItem);
-    
     virtual  void  initWidthConf(xml_node<> * pItem);
-   
 	void setSource(const char* path, float customWidth = 0, float customHeight = 0);
 protected:
     Sprite* m_pItem;

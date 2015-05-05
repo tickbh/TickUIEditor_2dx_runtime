@@ -6,7 +6,6 @@
 #include "src/TDImage.h"
 #include "src/TDScale9.h"
 #include "src/TDButton.h"
-#include "src/TDTip.h"
 #include "src/TDTab.h"
 #include "src/TDPage.h"
 #include "src/TDBar.h"

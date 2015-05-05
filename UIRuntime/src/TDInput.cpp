@@ -1,9 +1,10 @@
 #include "TDInput.h"
 #include "TDScale9.h"
 
-#define DEFAULT_WIDTH 100
-#define DEFAULT_HEIGHT 21 
-#define DEFAULT_FONT_SIZE 21
+#define DEFAULT_WIDTH 121
+#define DEFAULT_HEIGHT 31 
+#define DEFAULT_FONT_SIZE 12
+const static char* defaultImg = "Images/shurukuang.png";
 
 void TDInput::editBoxEditingDidBegin(ui::EditBox* editBox){
     
@@ -37,7 +38,6 @@ ui::EditBox::InputFlag getInputFlag(int num){
         default:
             break;
     }
-
 	return ui::EditBox::InputFlag::INITIAL_CAPS_WORD;
 }
 
@@ -72,7 +72,6 @@ ui::EditBox::KeyboardReturnType getInputReturnType(int num){
         default:
             break;
     }
-    
 	return ui::EditBox::KeyboardReturnType::DEFAULT;
 }
 
@@ -91,58 +90,60 @@ bool TDInput::init(){
 
 
 const char* TDInput::getString(){
-    if(m_pEditor){
+    if(m_pEditor)
         return m_pEditor->getText();
-    }
     return "";
 }
 
 void TDInput::setString(const char* str)
 {
     if(str==NULL)
-    {
         str="";
-    }
     
     if(m_pEditor)
-    {
-        return m_pEditor->setText(str);
-    }
+        m_pEditor->setText(str);
 }
 
 void TDInput::initWidthConf(xml_node<> * pItem){
 	TDPanel::initWidthConf(pItem);
 	float width, height;
 	int fontSize, maxNum, returnType, inputMode, inputFlag;
+	string color;
+	string text, bg, emptyText;
     width= readAttrFloat(pItem, "Width");
 	height = readAttrFloat(pItem, "Height");
     fontSize= readAttrInt(pItem, "FontSize");
-    maxNum= readAttrInt(pItem, "LimitNum");
-    
+	maxNum = readAttrInt(pItem, "LimitNum");
+	readAttrString(pItem, "Color", color);
+	readAttrString(pItem, "Text", text);
+	readAttrString(pItem, "InputBg", bg);
+	readAttrString(pItem, "EmptyText", emptyText);
+	bool isPassword = readAttrBool(pItem, "IsPassword");
     float nowWidth=DEFAULT_WIDTH;
 	float nowHeight = DEFAULT_HEIGHT;
     int nowFontSize=DEFAULT_FONT_SIZE; 
-    
-    string color; 
-    readAttrString(pItem, "Color", color);
     if(width!=0){
         nowWidth=width;
     }
-    
     if(height!=0){
         nowHeight=height;
     }
     if(fontSize!=0){
         nowFontSize=fontSize;
     }
-    string text,bg;
-    readAttrString(pItem, "Text", text);
-    readAttrString(pItem, "EmptyText", bg);
     setContentSize(Size(nowWidth, nowHeight));
-    //, ui::Scale9Sprite::createWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(bg.c_str()))
-    m_pEditor=ui::EditBox::create(Size(nowWidth, nowHeight), NULL);
-    if(text.size()!=0){
-        m_pEditor->setPlaceHolder(text.c_str());
+	
+	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(bg.c_str());
+#ifdef ENABLE_DEFAULT_PNG
+	if (!frame)
+		frame = UIUtils::getInstance()->spriteFrameByName(defaultImg);
+#endif
+	if (!frame)
+		return;
+	
+	m_pEditor = EditBox::create(Size(nowWidth, nowHeight), Scale9Sprite::createWithSpriteFrame(frame));
+    if(emptyText.size() != 0){
+		m_pEditor->setPlaceHolder(emptyText.c_str());
     }
     if(color.size()!=0){
         replaceStr(color, "#", "");
@@ -150,15 +151,13 @@ void TDInput::initWidthConf(xml_node<> * pItem){
         m_pEditor->setFontColor(parseRgb(temp));
     }
     m_pEditor->setFont("Helvetica", nowFontSize);
-  
-    //m_pEditor->setTouchPriority(kCCMenuHandlerPriority);  
     m_pEditor->setMaxLength(maxNum);
-    //m_pEditor->setInputFlag(getInputFlag(inputFlag));
+	if (isPassword)
+		m_pEditor->setInputFlag(ui::EditBox::InputFlag::PASSWORD);
     //m_pEditor->setInputMode(getInputMode(inputMode));
     //m_pEditor->setReturnType(getInputReturnType(returnType));
  
     addChild(m_pEditor);
-   
     m_pEditor->setPositionX(nowWidth/2);
     m_pEditor->setPositionY(-nowHeight/2);
 }

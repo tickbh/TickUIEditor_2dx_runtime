@@ -163,6 +163,24 @@ void splitStr(vector<string> &gRet, string cStr ,const char* cSplit ){
 }
 
 
+bool readAttrBool(xml_node<> * pItem, const char* cAttr) {
+	if (!cAttr)
+		return 0;
+
+	xml_attribute<> * pNode = pItem->first_attribute(cAttr);
+	if (!pNode)
+		return 0;
+
+	char * v = pNode->value();
+	if (strcmp("TRUE", v) == 0 || strcmp("true", v) == 0) {
+		return true;
+	}
+	int value = atoi(v);
+	if (value != 0)
+		return true;
+	return false;
+}
+
 int readAttrInt(xml_node<> * pItem,const char* cAttr){
     
 	if(!cAttr)

@@ -53,7 +53,7 @@ void TDPage::initWidthConf(xml_node<> * pItem){
 	m_nRowDistance = readAttrFloat(pItem, "rowDis");
 	m_nColDistance = readAttrFloat(pItem, "colDis");
     nMaxNum=readAttrInt(pItem, "maxNum");
-    hasPageBar=(bool)readAttrInt(pItem, "hasPageBar");
+    hasPageBar=readAttrBool(pItem, "hasPageBar");
 
     for(int i=0;i<nMaxNum;i++){ 
         TDPanel* item=TDUI::instance()->createUI(itemName);

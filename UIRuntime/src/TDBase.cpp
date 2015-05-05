@@ -2,7 +2,6 @@
 #include "TDScale9.h"
 #include "TDButton.h"
 #include "TDImage.h"
-#include "TDTip.h"
 #include "TDUI.h"
 #include "TDRichText.h"
 #include "TDInput.h"
@@ -13,8 +12,6 @@
 #include "TDAccordion.h"
 #include "rapidxml/rapidxml_print.hpp"
 #include "LuaUIManager.h"
-
-
 
 void TDPanel::updateDisplayedOpacity(GLubyte parentOpacity)
 {
@@ -96,8 +93,6 @@ void TDPanel::setY(float y){
 }
 
 
-
-
 void TDPanel::selected(){
 	bool control = LuaUIManager::instance()->selected(this->getObjectId());
 	if (control) {
@@ -109,12 +104,9 @@ void TDPanel::unselected() {
 	LuaUIManager::instance()->unselected(this->getObjectId());
 }
 
-
-
 void TDPanel::onPreSelect() {
     
 }
-
 
 unsigned int TDPanel::getObjectId()
 {
@@ -128,7 +120,7 @@ unsigned int TDPanel::getLuaRefId()
 
 void TDPanel::updateGame( float dt /*= 0.0*/ )
 {
-	//FlashBuilderManager::instance()->onUpdateGame(this->getObjectId());
+	LuaUIManager::instance()->onUpdateGame(this->getObjectId());
 }
 
 void TDPanel::update( float fDelta /*= 0.0f*/ )
@@ -302,11 +294,7 @@ void TDPanel::parseConf(xml_node<> * pItem){
             if(panel && panel->confPath.size()!=0){
                 panel->loadConf(panel->confPath.c_str());
             }
-			//else if(panel && pItem->first_node()) {
-			//	panel->parseConf(pItem->first_node());
-			//}
-
-			item->initWidthConf(pItem);//大小，子容器 
+			item->initWidthConf(pItem);
 			LuaUIManager::instance()->initWidthConfByLua(item, pItem);
         }
         pItem=pItem->next_sibling();
@@ -364,7 +352,6 @@ void TDPanel::registerWithTouchDispatcher()
 	listener->onTouchCancelled = CC_CALLBACK_2(TDPanel::onTouchCancelled, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	_touchListener = listener;
-
 }
 
 void TDPanel::unregisterWithTouchDispatcher()
@@ -638,7 +625,6 @@ bool TDPanel::procTuiEvent(const string& event,TDPanel* target){
 }
 
 void TDPanel::onSelectItem(Ref* pNode){
-    
     TDButton* button=dynamic_cast<TDButton*>(pNode);
     if(button){
         if(button->getEnable()){ 
@@ -712,17 +698,8 @@ TDPanel* TDPanel::getPanel(const char* name){
 	return dynamic_cast<TDPanel*>(this->getUI(name));
 }
 
-TDEditBar* TDPanel::getEditBar(const char* name){
-    
-	return dynamic_cast<TDEditBar*>(this->getUI(name));
-}
-
 TDCheckBox* TDPanel::getCheckBox(const char* name){
 	return dynamic_cast<TDCheckBox*>(this->getUI(name));
-}
-
-TDCount* TDPanel::getCount(const char* name){
-	return dynamic_cast<TDCount*>(this->getUI(name));
 }
 
 TDBar* TDPanel::getBar(const char* name){
@@ -731,10 +708,6 @@ TDBar* TDPanel::getBar(const char* name){
 
 TDInput*  TDPanel::getInput(const char* name){
 	return dynamic_cast<TDInput*>(this->getUI(name));
-}
-
-TDRadio* TDPanel::getRadio(const char* name){
-	return dynamic_cast<TDRadio*>(this->getUI(name));
 }
 
 TDAccordion* TDPanel::getAccordion(const char* name){

@@ -21,7 +21,6 @@ TDButton::TDButton()
 
 TDButton::~TDButton(){
     
-    
 }
 
 void TDButton::onEnter(){

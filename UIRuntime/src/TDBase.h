@@ -19,7 +19,6 @@ class TDImage;
 class TDScrollPanel;
 class TDCount;
 class TDBar;
-class TDEditBar;
 class TDInput;
 class TDCheckBox;
 class TDRadio;
@@ -29,9 +28,9 @@ class TDRichText;
 class TDPanel : public Node, public TuiEvent, public BaseEvent
 {
 public:
-    ~TDPanel();
     TDPanel();
-    
+	virtual ~TDPanel();
+
     virtual bool init();
 
 	void initConf(xml_node<> * pRoot, Node* parent = NULL);
@@ -84,7 +83,6 @@ public:
     void clearSelect();
     
     DEV_PROPERTY(bool, m_bTouchEnable, TouchEnable);
-    
     virtual bool onTouchBegan(Touch *pTouch, Event *pEvent);
 	virtual void onTouchMoved(Touch *pTouch, Event *pEvent);
 	virtual void onTouchEnded(Touch *pTouch, Event *pEvent);
@@ -95,7 +93,6 @@ public:
 	virtual void setTarget(Ref *rec, SEL_MenuHandler selector);
     virtual void setListner(unsigned int id, string func);
     
-    TDEditBar* getEditBar(const char*);
     TDInput* getInput(const char*);
     TDScrollPanel* getScrollPanel(const char*);
     TDButton* getButton( const char*);
@@ -103,13 +100,10 @@ public:
     TDPage* getPage(const char*);
     TDScale9* getScale9(const char*);
     TDTab* getTab(const char*);
-    TDCount* getCount(const char*);
     TDPanel* getPanel(const char*);
     TDBar* getBar(const char*);
     
     TDCheckBox* getCheckBox(const char*);
-    TDRadio* getRadio(const char*);
-    
     TDAccordion* getAccordion(const char*);
 
 	TDRichText* getRichText(const char* name);

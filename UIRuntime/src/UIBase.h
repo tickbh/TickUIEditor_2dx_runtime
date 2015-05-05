@@ -83,6 +83,7 @@ int HexToDec(const char *s);
 int to_hex_value(unsigned short c);
 unsigned int parseColor(string & color_str);
 
+bool readAttrBool(xml_node<> * pItem, const char* cAttr);
 int readAttrInt(xml_node<> * pItem,const char* cAttr);
 float readAttrFloat(xml_node<> * pItem,const char* cAttr);
 void readAttrString(xml_node<> * pItem,const char* cAttr, string & ret);

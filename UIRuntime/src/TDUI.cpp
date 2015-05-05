@@ -3,7 +3,6 @@
 #include "TDImage.h"
 #include "TDScale9.h"
 #include "TDButton.h"
-#include "TDTip.h"
 #include "TDTab.h"
 #include "TDPage.h"
 #include "TDBar.h"

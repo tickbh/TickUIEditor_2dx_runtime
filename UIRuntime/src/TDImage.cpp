@@ -1,6 +1,6 @@
 #include "TDImage.h" 
 
-
+static const char* defaultImage = "Images/Sprite.png";
 
 TDImage::TDImage(){
     m_pItem=NULL;
@@ -13,20 +13,24 @@ TDImage* TDImage::create(xml_node<> * pItem){
 }
 
 void TDImage::setSource(const char* path, float customWidth, float customHeight){
-    
-    if(!UIUtils::getInstance()->spriteFrameByName(path)){
+	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(path);
+#ifdef ENABLE_DEFAULT_PNG
+	if (frame == nullptr) {
+		frame = UIUtils::getInstance()->spriteFrameByName(defaultImage);
+	}
+#endif
+	if (!frame) {
 		if(m_pItem != NULL) {
 			m_pItem->setVisible(false);
 		}
         return;
     }
     if(m_pItem==NULL){
-        
-        m_pItem=Sprite::createWithSpriteFrameName(path );
+		m_pItem = Sprite::createWithSpriteFrame(frame);
         m_pItem->setCascadeOpacityEnabled(true);
         addChild(m_pItem);
     }else{
-        m_pItem->setSpriteFrame(UIUtils::getInstance()->spriteFrameByName(path));
+		m_pItem->setSpriteFrame(frame);
 		m_pItem->setVisible(true);
     }
 	m_pItem->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -47,7 +51,7 @@ void TDImage::setSource(const char* path, float customWidth, float customHeight)
 
 void TDImage::initWidthConf(xml_node<> * pItem){
     string path;
-    readAttrString(pItem, "source", path);
+    readAttrString(pItem, "Image", path);
 	Size size=readContainSize(pItem, getParent());
     setSource(path.c_str(), size.width, size.height);
     

@@ -13,7 +13,6 @@ public:
     TDButton();
     ~TDButton();
     
-    
     static TDButton* create(xml_node<> * pItem);
     virtual  void initWidthConf(xml_node<> * pItem);
     
