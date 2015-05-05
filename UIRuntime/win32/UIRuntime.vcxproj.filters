@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{54e6d03c-7a93-4874-860b-54a438800578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{c8becfb8-2a04-480a-9a43-0fff369367f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\rapidxml">
+      <UniqueIdentifier>{5e6dcb1c-8561-49d1-9eac-a10f3017d94a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="widget">
+      <UniqueIdentifier>{4b2fb715-90c0-4412-92b0-e6c245f8093b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\TDBar.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDBase.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDButton.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDCheckBox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDCount.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDImage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDInput.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDMaskPanel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDPage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDRichText.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDScale9.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDTab.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDTip.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDUI.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDWin.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\UIBase.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\UIUtils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TDAccordion.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rapidxml\rapidxml_iterators.hpp">
+      <Filter>include\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rapidxml\rapidxml_print.hpp">
+      <Filter>include\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rapidxml\rapidxml_utils.hpp">
+      <Filter>include\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rapidxml\rapidxml.hpp">
+      <Filter>include\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\widget\WidgetRichText.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LuaUIManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ExportUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\TDBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDButton.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDCheckBox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDCount.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDImage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDInput.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDMaskPanel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDPage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDRichText.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDScale9.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDTab.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDTip.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDUI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDWin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UIBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UIUtils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDAccordion.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDBar.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\widget\WidgetRichText.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LuaUIManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

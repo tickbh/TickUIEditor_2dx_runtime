@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{63795A99-E3D5-4396-A2DC-B240B14462D3}</ProjectGuid>
+    <RootNamespace>UIRuntime</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)../;$(SolutionDir)../cocos/;$(SolutionDir)../external/;$(SolutionDir)../cocos/platform;$(SolutionDir)../cocos/platform/desktop;$(SolutionDir)../external/glfw3/include/win32;$(SolutionDir)../external/win32-specific/gles/include/OGLES;$(ProjectDir)../include;$(SolutionDir)../extensions;$(ProjectDir)../;$(SolutionDir)../external/lua/tolua;$(SolutionDir)../external/lua/luajit/include;$(SolutionDir)../external/lua;$(SolutionDir)../cocos/scripting/lua-bindings/manual;$(SolutionDir)../cocos/scripting/lua-bindings/auto;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4267;4251;4244;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ExportUI.h" />
+    <ClInclude Include="..\include\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="..\include\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="..\include\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="..\include\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="..\src\LuaUIManager.h" />
+    <ClInclude Include="..\src\TDAccordion.h" />
+    <ClInclude Include="..\src\TDBar.h" />
+    <ClInclude Include="..\src\TDBase.h" />
+    <ClInclude Include="..\src\TDButton.h" />
+    <ClInclude Include="..\src\TDCheckBox.h" />
+    <ClInclude Include="..\src\TDCount.h" />
+    <ClInclude Include="..\src\TDImage.h" />
+    <ClInclude Include="..\src\TDInput.h" />
+    <ClInclude Include="..\src\TDMaskPanel.h" />
+    <ClInclude Include="..\src\TDPage.h" />
+    <ClInclude Include="..\src\TDRichText.h" />
+    <ClInclude Include="..\src\TDScale9.h" />
+    <ClInclude Include="..\src\TDScene.h" />
+    <ClInclude Include="..\src\TDTab.h" />
+    <ClInclude Include="..\src\TDTip.h" />
+    <ClInclude Include="..\src\TDUI.h" />
+    <ClInclude Include="..\src\TDWin.h" />
+    <ClInclude Include="..\src\UIBase.h" />
+    <ClInclude Include="..\src\UIUtils.h" />
+    <ClInclude Include="..\widget\WidgetRichText.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\LuaUIManager.cpp" />
+    <ClCompile Include="..\src\TDAccordion.cpp" />
+    <ClCompile Include="..\src\TDBar.cpp" />
+    <ClCompile Include="..\src\TDBase.cpp" />
+    <ClCompile Include="..\src\TDButton.cpp" />
+    <ClCompile Include="..\src\TDCheckBox.cpp" />
+    <ClCompile Include="..\src\TDCount.cpp" />
+    <ClCompile Include="..\src\TDImage.cpp" />
+    <ClCompile Include="..\src\TDInput.cpp" />
+    <ClCompile Include="..\src\TDMaskPanel.cpp" />
+    <ClCompile Include="..\src\TDPage.cpp" />
+    <ClCompile Include="..\src\TDRichText.cpp" />
+    <ClCompile Include="..\src\TDScale9.cpp" />
+    <ClCompile Include="..\src\TDScene.cpp" />
+    <ClCompile Include="..\src\TDTab.cpp" />
+    <ClCompile Include="..\src\TDTip.cpp" />
+    <ClCompile Include="..\src\TDUI.cpp" />
+    <ClCompile Include="..\src\TDWin.cpp" />
+    <ClCompile Include="..\src\UIBase.cpp" />
+    <ClCompile Include="..\src\UIUtils.cpp" />
+    <ClCompile Include="..\widget\WidgetRichText.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\cocos2d-x-3.5\cocos\2d\libcocos2d.vcxproj">
+      <Project>{98a51ba8-fc3a-415b-ac8f-8c7bd464e93e}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
