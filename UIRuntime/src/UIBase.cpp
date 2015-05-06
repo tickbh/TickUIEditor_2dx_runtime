@@ -112,10 +112,14 @@ unsigned int parseColor(string & color_str)
 				color = 0xff;
 			}
 
-			for (size_t i = color_str.size() - 1; i > 1; i -= 2)
-			{
-				color = (color << 4) + to_hex_value(color_str[i - 1]);
+			//for (size_t i = color_str.size() - 1; i > 1; i -= 2)
+			//{
+			//	color = (color << 4) + to_hex_value(color_str[i - 1]);
+			//	color = (color << 4) + to_hex_value(color_str[i]);
+			//}
+			for (size_t i = 1; i < color_str.size() - 1; i += 2) {
 				color = (color << 4) + to_hex_value(color_str[i]);
+				color = (color << 4) + to_hex_value(color_str[i + 1]);
 			}
 		}
 	}

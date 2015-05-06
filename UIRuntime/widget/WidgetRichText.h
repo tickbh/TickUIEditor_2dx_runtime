@@ -8,11 +8,11 @@ USING_NS_CC;
 
 class RichConfig {
 public:
-	Color4B color;
+	Color3B color;
 	int fontSize;
 	float outlineSize;
-	Color4B outlineColor;
-	RichConfig(Color4B color = Color4B::BLACK, int fontSize = 12, float outlineSize = 0.0, Color4B outlineColor = Color4B::BLACK)
+	Color3B outlineColor;
+	RichConfig(Color3B color = Color3B::BLACK, int fontSize = 12, float outlineSize = 0.0, Color3B outlineColor = Color3B::BLACK)
 	:color(color)
 	,fontSize(fontSize)
 	,outlineSize(outlineSize)
@@ -32,23 +32,26 @@ static const RichConfig defaultConfig;
 
 class WidgetRichText : public Node {
 public:
-	static WidgetRichText* create(std::string content, RichConfig config = defaultConfig) {
-		WidgetRichText* widget = new WidgetRichText(content, defaultConfig);
+	static WidgetRichText* create(std::string content, Size size, RichConfig config = defaultConfig) {
+		WidgetRichText* widget = new WidgetRichText(content, size, defaultConfig);
 		if (widget) {
 			widget->autorelease();
 		}
 		return widget;
 	}
-	WidgetRichText(std::string content, RichConfig config = defaultConfig)
+	WidgetRichText(std::string content, Size size, RichConfig config = defaultConfig)
 	:content(content)
 	, orignConfig(config)
 	, curConfig(config)
 	{
+		this->setContentSize(size);
 		parseText();
 	}
 
 	void setContent(std::string content);
 	std::string getContent() { return this->content; }
+	void setColor(Color3B color);
+	void setFontSize(float fontSize);
 	bool parseText();
 
 private:

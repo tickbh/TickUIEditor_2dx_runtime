@@ -1,5 +1,6 @@
 #include "TDRichText.h"
 
+const char* defaultText = "Text Label";
 
 #define DEFAULT_WIDTH 100
 #define DEFAULT_HEIGHT 21 
@@ -45,64 +46,32 @@ TDRichText* TDRichText::create( const char* utf8_str, const Size& preferred_size
 
 void TDRichText::initWidthConf( xml_node<> * pItem )
 {
-	float width,height;
-	int fontSize;
-	width = readAttrFloat(pItem, "width");
-	height = readAttrFloat(pItem, "height");
-	fontSize= readAttrInt(pItem, "fontSize");
-
-	float nowWidth=DEFAULT_WIDTH;
-	float nowHeight = DEFAULT_HEIGHT;
-	int nowFontSize=DEFAULT_FONT_SIZE;
-
-	string strVA="",strHA="" ,color;
-	readAttrString(pItem, "textAlign", strHA);
-	readAttrString(pItem, "verticalAlign", strVA);
-	readAttrString(pItem, "color", color);
-
-	if(strHA.size()!=0){
-	}else{
-	}
-	    
-	if(strVA.size()!=0){
-	}else{
-	}
-
-	if(width!=0){
-		nowWidth=width;
-	}
-
-	if(height!=0){
-		nowHeight=height;
-	}
-	if(fontSize!=0){
-		nowFontSize=fontSize;
-	}
+	string color;
+	readAttrString(pItem, "Color", color);
+	int fontSize = readAttrInt(pItem, "FontSize");
 	string text;
-	readAttrString(pItem, "text", text);
+	readAttrString(pItem, "Text", text);
+#ifdef ENABLE_DEFAULT_PNG
+	if (text.empty())
+		text = defaultText;
+#endif
 
 	string font;
 	readAttrString(pItem, "font", font);
-	if(font.empty()) {
-		font = "font";
+
+	if(fontSize==0){
+		fontSize = 18;
 	}
 
-	Size size(nowWidth, nowHeight);
+	Size size = this->getContentSize();
 	initWidthFormat(text.c_str(), size, font.c_str());
-	setFontSize(fontSize);
-	if(color.size()!=0){
-		//replaceStr(color, "#", "");
-		//unsigned int temp = HexToDec(color.c_str());
+	if (color.size() != 0) {
 		unsigned int temp = parseColor(color);
-		//m_pLabel->setDefaultColor(temp);
+		m_pLabel->setColor(parseRgb(temp));
 	}
-
-	m_pLabel->setAnchorPoint(Vec2(0.5f,0.5f));
-	m_pLabel->setPositionX(nowWidth/2);
-	m_pLabel->setPositionY(nowHeight/2); 
-	//m_pLabel->setDefaultAlignment(hAlign);
-
-	setContentSize(size);
+	m_pLabel->setFontSize(fontSize);
+	m_pLabel->setContentSize(size);
+	TDPanel::initWidthConf(pItem);
 }
 
 bool TDRichText::initWidthFormat( const char* utf8_str, const Size& preferred_size, const char* font_alias /*= DFONT_DEFAULT_FONTALIAS*/ )
@@ -110,7 +79,7 @@ bool TDRichText::initWidthFormat( const char* utf8_str, const Size& preferred_si
 	if(utf8_str==NULL){
 		utf8_str="";
 	}
-	m_pLabel = WidgetRichText::create(utf8_str);
+	m_pLabel = WidgetRichText::create(utf8_str, preferred_size);
 	if (m_pLabel)
 	{
 		this->addChild(m_pLabel);
