@@ -40,8 +40,9 @@ void TDBar::setSource(const char* path, Size contentSize/* = Size::ZERO*/) {
 	}
 	m_pItem->setScaleX(contentSize.width * 1.0f / m_pItem->getContentSize().width);
 	m_pItem->setScaleY(contentSize.height * 1.0f / m_pItem->getContentSize().height);
-	m_pItem->setPosition(Vec2(contentSize.width / 2, -contentSize.height / 2));
+	m_pItem->setPosition(Vec2(contentSize.width / 2, contentSize.height / 2));
 	setContentSize(contentSize);
+	resetSpriteInfo();
 }
 
 
@@ -55,10 +56,11 @@ TDBar* TDBar::create(xml_node<> * pItem){
 void TDBar::initWidthConf(xml_node<> * pItem){
     string path;
     readAttrString(pItem, "ImageBar", path);
-    float per= readAttrFloat(pItem, "per");
+    float per= readAttrFloat(pItem, "Progress");
     setPer(per);
 	Size currentSize = readContainSize(pItem, getParent());
 	setSource(path.c_str(), currentSize);
+	TDPanel::initWidthConf(pItem);
 }
  
 void TDBar::setNum(long lCur,long lMax){
@@ -76,13 +78,26 @@ void TDBar::setPer(float num){
         m_nPer=100;
     }
     m_nPer=num*100;
+	resetSpriteInfo();
 }
 
-void TDBar::beforeDraw(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated){
+
+void TDBar::resetSpriteInfo() {
+	if (!m_pItem)
+		return;
+
+	m_pItem->setContentSize(Size(this->getContentSize().width * m_nPer / 100, this->getContentSize().height));
+
+}
+
+
+void TDBar::beforeDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) {
     glEnable(GL_SCISSOR_TEST);
     if(this->getParent()){
-        Size size=Director::getInstance()->getWinSize();
-        Point worldPos= convertToWorldSpace(Vec2(0 ,-getContentSize().height));
+		Rect rect = getPanelRect(this);
+		Size size=Director::getInstance()->getWinSize();
+		//Point worldPos = convertToWorldSpace(Vec2(rect.origin.x, rect.origin.y));
+		Point worldPos = convertToWorldSpace(Vec2(0, -this->getContentSize().height));
         if(worldPos.x<-getContentSize().width||
            worldPos.y<-getContentSize().height||
            worldPos.x>size.width||
@@ -101,15 +116,16 @@ void TDBar::beforeDraw(Renderer *renderer, const Mat4& parentTransform, bool par
 }
 
 
-void TDBar::afterDraw(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated)
+void TDBar::afterDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
-    
     glDisable(GL_SCISSOR_TEST);
     
 }
 
-void TDBar::visit(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated)
+void TDBar::visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
+	//Node::visit(renderer, parentTransform, parentFlags);
+	//return;
 	// quick return if not visible
 	if (!isVisible())
     {
@@ -127,7 +143,7 @@ void TDBar::visit(Renderer *renderer, const Mat4& parentTransform, bool parentTr
     }
     
 	this->transform(parentTransform);
-    this->beforeDraw(renderer, parentTransform, parentTransformUpdated);
+	this->beforeDraw(renderer, parentTransform, parentFlags);
     
 	if (!_children.empty())
     {
@@ -138,7 +154,7 @@ void TDBar::visit(Renderer *renderer, const Mat4& parentTransform, bool parentTr
 			Node *child = _children.at(i);
 			if (child->getLocalZOrder() < 0)
             {
-				child->visit(renderer, parentTransform, parentTransformUpdated);
+				child->visit(renderer, parentTransform, parentFlags);
 			}
             else
             {
@@ -147,21 +163,21 @@ void TDBar::visit(Renderer *renderer, const Mat4& parentTransform, bool parentTr
 		}
 		
 		// this draw
-		this->draw(renderer, parentTransform, parentTransformUpdated);
+		this->draw(renderer, parentTransform, parentFlags);
 		
 		// draw children zOrder >= 0
 		for (; i < (unsigned int)_children.size(); i++)
         {
 			Node *child = _children.at(i);
-			child->visit(renderer, parentTransform, parentTransformUpdated);
+			child->visit(renderer, parentTransform, parentFlags);
 		}
 	}
     else
     {
-		this->draw(renderer, parentTransform, parentTransformUpdated);
+		this->draw(renderer, parentTransform, parentFlags);
     }
     
-	this->afterDraw(renderer, parentTransform, parentTransformUpdated);
+	this->afterDraw(renderer, parentTransform, parentFlags);
 	if ( m_pGrid && m_pGrid->isActive())
     {
 		m_pGrid->afterDraw(this);

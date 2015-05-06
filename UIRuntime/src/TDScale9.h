@@ -3,18 +3,11 @@
 
 #include "TDBase.h"
 
-
 class TDScale9 : public TDPanel
 {
 public:
-    /**
-        * @js ctor
-        */
+
     TDScale9();
-    /**
-        * @js NA
-        * @lua NA
-        */
     virtual ~TDScale9();
 	virtual bool init();
 

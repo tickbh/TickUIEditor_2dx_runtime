@@ -92,7 +92,8 @@ Size readContainSize(xml_node<> * pItem, Node* parent);
 Size getParentSize(Node* parent);
 Color3B parseRgb(int hex);
 int parseH(const Color3B& color);
-
+void setCenterPos(Node* parent, Node* current);
+Rect getPanelRect(Node* pNode);
 Point getPosInScreen(Point point, Node* pTarget);
 
 //屏幕上的点相对于target里面的点

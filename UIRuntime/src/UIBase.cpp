@@ -334,3 +334,20 @@ long getTimer()
 	//return (a * 1000 + now.tv_usec / 1000);
 	return 0;
 }
+
+void setCenterPos(Node* parent, Node* current) {
+	if (!current || !parent)
+		return;
+	current->setAnchorPoint(Vec2(0.5, 0.5));
+	current->setPosition(Vec2(parent->getContentSize().width / 2,
+		parent->getContentSize().height / 2));
+}
+
+Rect getPanelRect(Node* pNode) {
+	Rect rect;
+	int width = pNode->getContentSize().width * pNode->getScaleX();
+	int height = pNode->getContentSize().height * pNode->getScaleY();
+	rect.setRect(pNode->getPositionX() - (0.5 - pNode->getAnchorPoint().x) * width,
+		pNode->getPositionY() - (0.5 - pNode->getAnchorPoint().y) * height, width, height);
+	return rect;
+}

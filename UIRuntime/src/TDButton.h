@@ -16,8 +16,10 @@ public:
     static TDButton* create(xml_node<> * pItem);
     virtual  void initWidthConf(xml_node<> * pItem);
     
-    virtual void selected(); 
-    virtual void unselected();
+    virtual void onSelected(); 
+	virtual void onPreSelect();
+	virtual void onEndSelect();
+
     virtual void onEnter();
     
     virtual void setVisible(bool visible);

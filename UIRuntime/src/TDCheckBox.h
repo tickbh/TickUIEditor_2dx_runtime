@@ -15,8 +15,7 @@ public:
     ~TDCheckBox(); 
     
     
-    virtual void selected();
-    virtual void unselected();
+    virtual void onSelected();
     static TDCheckBox* create(xml_node<> * pItem);
     virtual  void initWidthConf(xml_node<> * pItem);
     

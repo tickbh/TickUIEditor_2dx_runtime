@@ -19,14 +19,13 @@ public:
     static TDBar* create(xml_node<> * pItem);
     virtual  void initWidthConf(xml_node<> * pItem);
     
-	virtual void visit(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated);
+	virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
     
-	virtual void  afterDraw(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated);
-    
-	virtual void  beforeDraw(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated);
+	virtual void  afterDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
+	virtual void  beforeDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
     void setNum(long lCur,long lMax);
-    
     void setPer(float num);
+	void resetSpriteInfo();
     
 protected:
     float m_nPer;

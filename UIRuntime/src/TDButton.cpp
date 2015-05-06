@@ -37,7 +37,7 @@ void TDButton::setVisible(bool visible){
     }
     
     TDPanel::setVisible(visible); 
-    unselected();
+	onEndSelect();
 }
 
 
@@ -45,7 +45,7 @@ void TDButton::setEnable(bool value){
     if(m_bEnable!=value){
         m_bEnable=value;
         if(m_bEnable){
-            unselected();
+			onEndSelect();
         }else{
             clear();
             m_pDisableBg->setVisible(true);
@@ -71,28 +71,34 @@ void TDButton::clear(){
     if(m_pDisableLabel)
         m_pDisableLabel->setVisible(false);
 }
-void TDButton::selected(){
+void TDButton::onSelected(){
     if(!m_bEnable)
         return;
-    clear();
-    if(m_pSelectBg)
-		m_pSelectBg->setVisible(true);
-	if (getPreSelectNode())
-		getPreSelectNode()->setVisible(true);
     if (m_pListener && m_pfnSelector)
         (m_pListener->*m_pfnSelector)(this);
 }
 
-void TDButton::unselected(){
-    if(!m_bEnable){
-        return;
-    }
-    clear();
-    if(m_pNormalBg) m_pNormalBg->setVisible(true);
+void TDButton::onPreSelect() {
+	if (!m_bEnable)
+		return;
+	clear();
+	if (m_pSelectBg)
+		m_pSelectBg->setVisible(true);
+	if (getPreSelectNode())
+		getPreSelectNode()->setVisible(true);
+}
+
+void TDButton::onEndSelect() {
+	if (!m_bEnable) {
+		return;
+	}
+	clear();
+	if (m_pNormalBg) m_pNormalBg->setVisible(true);
 	if (getPreNormalNode())
 		getPreNormalNode()->setVisible(true);
-    
 }
+
+
 TDButton* TDButton::create(xml_node<> * pItem){
 	TDButton*  ret = UIBase::create<TDButton>();
     ret->initWidthConf(pItem);
@@ -274,12 +280,10 @@ void TDButton::initWidthConf(xml_node<> * pItem){
 			getContentSize().height /2));
     }
     
-    unselected();
+    onEndSelect();
 }
 
 void TDButton::setTarget(Ref* obj, SEL_MenuHandler selector){
     m_pListener=obj;
     m_pfnSelector=selector;
 }
-
-

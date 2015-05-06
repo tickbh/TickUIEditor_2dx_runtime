@@ -26,15 +26,12 @@ bool TDCheckBox::isSelected(){
 }
 
 
-void TDCheckBox::selected(){
+void TDCheckBox::onSelected(){
 	if (!isEnable())
 		return;
 	setSelected(!m_bSelected);
 }
 
-void TDCheckBox::unselected(){
-    
-}
 void TDCheckBox::setSelected(bool value){
     m_bSelected=value;
 	resetStatus();
@@ -62,6 +59,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 #endif
 	if (frame) {
 		m_pImgNormalBg = Sprite::createWithSpriteFrame(frame);
+		m_pImgNormalBg->setAnchorPoint(Vec2::ZERO);
 		addChild(m_pImgNormalBg);
 	}
 
@@ -74,6 +72,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 #endif
 	if (frame) {
 		m_pImgSelectBg = Sprite::createWithSpriteFrame(frame);
+		m_pImgSelectBg->setAnchorPoint(Vec2::ZERO);
 		addChild(m_pImgSelectBg);
 	}
 
@@ -86,6 +85,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 #endif
 	if (frame) {
 		m_pImgDisableBg = Sprite::createWithSpriteFrame(frame);
+		m_pImgDisableBg->setAnchorPoint(Vec2::ZERO);
 		addChild(m_pImgDisableBg);
 	}
 
@@ -98,6 +98,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 #endif
 	if (frame) {
 		m_pImgNodeDisable = Sprite::createWithSpriteFrame(frame);
+		setCenterPos(this, m_pImgNodeDisable);
 		addChild(m_pImgNodeDisable);
 	}
 
@@ -110,6 +111,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 #endif
 	if (frame) {
 		m_pImgNodeNormal = Sprite::createWithSpriteFrame(frame);
+		setCenterPos(this, m_pImgNodeNormal);
 		addChild(m_pImgNodeNormal);
 	}
 	std::string status;
@@ -138,7 +140,7 @@ void TDCheckBox::resetStatus() {
 		m_pImgNodeDisable->setVisible(m_eStatus == CheckStatus::Disable && m_bSelected);
 	}
 	if (m_pImgNodeNormal) {
-		m_pImgNodeDisable->setVisible(m_eStatus == CheckStatus::Enable && m_bSelected);
+		m_pImgNodeNormal->setVisible(m_eStatus == CheckStatus::Enable && m_bSelected);
 	}
 }
 

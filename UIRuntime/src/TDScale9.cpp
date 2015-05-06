@@ -1,9 +1,4 @@
-
 #include "TDScale9.h"
-#include "2d/CCSprite.h"
-#include "2d/CCSpriteFrameCache.h"
-#include "base/CCVector.h"
-#include "base/CCDirector.h"
 
 static const char* defaultImage = "Images/ImageFile.png";
 
@@ -46,7 +41,7 @@ void TDScale9::initWidthConf( xml_node<> * pItem )
 	if(size.height == 0){
 		size.height = _scale9Sprite->getContentSize().height;
 	} 
-	this->setContentSize(size);
+	this->setPreferredSize(size);
 	TDPanel::initWidthConf(pItem);
 }
 

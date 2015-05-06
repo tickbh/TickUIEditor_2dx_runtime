@@ -41,9 +41,9 @@ public:
     virtual void initWidthConf(xml_node<> * pItem);
     virtual bool procTuiEvent(const string&,TDPanel*);
 
-	virtual void selected();
-	virtual void unselected();
+	virtual void onSelected();
 	virtual void onPreSelect();
+	virtual void onEndSelect();
     
     virtual void onCreateComplete();
     virtual void everyLoad();
@@ -65,7 +65,6 @@ public:
 
 	unsigned int getObjectId();
 	unsigned int getLuaRefId();
-    
 	Node* getItemByPos(float nX, float nY);
 	void addItem(TDPanel*);
 	void addChildItem(TDPanel*);
@@ -111,8 +110,10 @@ public:
     
     bool hasLoadConf;
     bool hasInitMask;
-	virtual void onSelectItem(Ref*);
+	virtual void onPreSelectItem(Node*);
+	virtual void onSelectItem(Node*);
 	virtual void onUnSelectItem(Node*);
+	virtual void onEndSelectItem();
     
 	static void setStaticTarget(Ref *rec, SEL_MenuHandler selector);
 	map<string,TDPanel*> gUIs;

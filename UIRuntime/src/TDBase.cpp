@@ -88,20 +88,21 @@ void TDPanel::setY(float y){
 }
 
 
-void TDPanel::selected(){
+void TDPanel::onSelected(){
 	bool control = LuaUIManager::instance()->selected(this->getObjectId());
 	if (control) {
 		return;
 	}
 }
 
-void TDPanel::unselected() {
-	LuaUIManager::instance()->unselected(this->getObjectId());
-}
-
 void TDPanel::onPreSelect() {
     
 }
+
+void TDPanel::onEndSelect() {
+
+}
+
 
 unsigned int TDPanel::getObjectId()
 {
@@ -286,9 +287,9 @@ void TDPanel::parseConf(xml_node<> * pItem){
     while (pItem) {
         TDPanel* item=  TDUI::instance()->createUI(pItem);
         if(item){
-            if(item->tName==T_BUTTON_NAME){
+			if (item->tName == T_BUTTON_NAME || item->tName == T_CHECKBOX_NAME || item->tName == T_PAGE_NAME) {
                 addChildItem(item); 
-			}else if(item->tEvent.size()!=0){
+			} else if (item->tEvent.size() != 0) {
                 addChildItem(item);
             }else{
                 addChild(item);
@@ -425,7 +426,6 @@ int TDPanel::getSelectedIndex(){
 
 
 void TDPanel::clearSelect(){
-    
     if(m_pSelectedItem){
         onUnSelectItem(m_pSelectedItem);
     }
@@ -467,7 +467,6 @@ void TDPanel::setTarget(Ref *rec, SEL_MenuHandler selector)
 }
 
 bool TDPanel::onTouchBegan(Touch *pTouch, Event *pEvent){
-    
     if(!m_bTouchEnable){
         return false;
     }
@@ -490,31 +489,75 @@ bool TDPanel::onTouchBegan(Touch *pTouch, Event *pEvent){
     }
     
     Point targetPos=getPosInTarget(pTouch->getLocation(),item->getParent());
-    
     Node* node= getItemByPos(targetPos.x,targetPos.y);
     if(node==NULL){
         return false;
-    }else{
-        TDButton* button=dynamic_cast<TDButton*>(node);
-        if(button ){ 
-            if(m_pSelectedItem){
-                onUnSelectItem(m_pSelectedItem);
-            }
-            onSelectItem(button);
+    }
+	TDPanel* panel = dynamic_cast<TDPanel*>(node);
+	if (panel) {
+        if(m_pSelectedItem){
+            onUnSelectItem(m_pSelectedItem);
         }
-        TDPanel* tipContainer=dynamic_cast<TDPanel*>(node);
-        if(tipContainer ){
-            tipContainer->onPreSelect();
-            
-        }
-        
-    }  
+		onPreSelectItem(panel);
+    }
     return true;
+}
+
+
+void TDPanel::onTouchMoved(Touch *pTouch, Event *pEvent) {
+	touchMovePos.setPoint(pTouch->getLocation().x, pTouch->getLocation().y);
+	if (m_pSelectedItem) {
+		Node* item = (Node*)gTouchItems->getObjectAtIndex(0);
+		if (item == NULL) {
+			return;
+		}
+		Point targetPos = getPosInTarget(pTouch->getLocation(), item->getParent());
+		Node* node = getItemByPos(targetPos.x, targetPos.y);
+		if (node == NULL || node != m_pSelectedItem) {
+			onUnSelectItem(m_pSelectedItem);
+		}
+	}
+}
+
+void TDPanel::onTouchCancelled(Touch *touch, Event *pEvent) {
+	onUnSelectItem(m_pSelectedItem);
+}
+void TDPanel::onTouchEnded(Touch *pTouch, Event *pEvent) {
+	if (gTouchItems->count() <= 0) {
+		return;
+	}
+
+	Node* item = (Node*)gTouchItems->getObjectAtIndex(0);
+	if (item == NULL || item->getParent() == NULL) {
+		return;
+	}
+	Point touchEndPos = (pTouch->getLocation());
+
+	float distance = (touchEndPos.x - touchStartPos.x)*(touchEndPos.x - touchStartPos.x) + (touchEndPos.y - touchStartPos.y)*(touchEndPos.y - touchStartPos.y);
+	if (sqrt(distance) < 20) {
+		Point targetPos = getPosInTarget(pTouch->getLocation(), item->getParent());
+		TDPanel* node = (TDPanel*)getItemByPos(targetPos.x, targetPos.y);
+		if (node != NULL) {
+			if (m_pSelectedItem && node != m_pSelectedItem) {
+				onUnSelectItem(m_pSelectedItem);
+			}
+			if (node->tEvent.size() != 0) {
+				procTuiEvent(node->tEvent, node);
+			}
+			if (m_pStaticListener&& m_pStaticfnSelector)
+				(m_pStaticListener->*m_pStaticfnSelector)(node);
+			onSelectItem(node);
+		}
+	}
+	onEndSelectItem();
 }
 
 void TDPanel::removeItem(TDPanel* node){
     gTouchItems->removeObject(node);
 }
+
+
+
 
 Node* TDPanel::getItemByPos(float nX, float nY){
     Ref* obj;
@@ -522,99 +565,15 @@ Node* TDPanel::getItemByPos(float nX, float nY){
     {
         Node* pNode =  (Node*)(obj);
         if(pNode->isVisible()){
-            bool isFind=true;
-            if( nY>pNode->getPositionY()&&
-                nY<pNode->getPositionY()+pNode->getContentSize().height){
-            }else{
-                isFind=false;
-            }
-            if(pNode->getScaleX()>0){
-                if( nX>pNode->getPositionX() &&
-                   nX<pNode->getPositionX()+pNode->getContentSize().width
-                   ){
-                }else{
-                    isFind=false;
-                }
-            }else {
-                if(
-                   nX>pNode->getPositionX()-pNode->getContentSize().width &&
-                   nX<pNode->getPositionX()
-                   ){
-                }else{
-                    isFind=false;
-                }
-            }
-            if(isFind)
-                return pNode;
+			Rect rect = getPanelRect(pNode);
+			if (rect.containsPoint(Vec2(nX, nY))) {
+				return pNode;
+			}
         }
     }
     return NULL;
 }
 
-void TDPanel::onTouchMoved(Touch *pTouch, Event *pEvent)
-{
-    touchMovePos.setPoint(pTouch->getLocation().x,pTouch->getLocation().y);
-    if(m_pSelectedItem){
-        Node* item=(Node*) gTouchItems->getObjectAtIndex(0);
-        if(item==NULL){
-            return ;
-        }
-        Point targetPos=getPosInTarget(pTouch->getLocation(),item->getParent());
-        Node* node= getItemByPos(targetPos.x,targetPos.y);
-        if(node==NULL || node!=m_pSelectedItem){
-            onUnSelectItem(m_pSelectedItem);
-        }
-    }
-}
-
-void TDPanel::onTouchCancelled(Touch *touch, Event *pEvent)
-{
-    onUnSelectItem(m_pSelectedItem);
-    
-}
-void TDPanel::onTouchEnded(Touch *pTouch, Event *pEvent)
-{
-    if(gTouchItems->count()<=0){
-        return ;
-    }
-    
-    Node* item=(Node*) gTouchItems->getObjectAtIndex(0);
-    if(item==NULL || item->getParent()==NULL){
-        return ;
-    }
-    Point touchEndPos= (pTouch->getLocation());
-    
-    float distance= (touchEndPos.x-touchStartPos.x)*(touchEndPos.x-touchStartPos.x)+(touchEndPos.y-touchStartPos.y)*(touchEndPos.y-touchStartPos.y);
-    if(sqrt(distance)<20){
-        
-        Point targetPos= getPosInTarget(pTouch->getLocation(),item->getParent());
-        TDButton* button=dynamic_cast<TDButton*>(m_pSelectedItem);
-        if(button){
-            onUnSelectItem(button);
-            if(button->getEnable()){ 
-                if(button->tEvent.size()){
-                    procTuiEvent(button->tEvent,button);
-                }
-                if(m_pStaticListener&& m_pStaticfnSelector)
-                    (m_pStaticListener->*m_pStaticfnSelector)(button);
-            }
-        }else{
-            TDPanel* node= (TDPanel*) getItemByPos(targetPos.x,targetPos.y);
-            if(node!=NULL){
-                if(m_pSelectedItem && node != m_pSelectedItem){
-                    onUnSelectItem(m_pSelectedItem);
-                }
-                if(node->tEvent.size()!=0){
-                    procTuiEvent(node->tEvent,node); 
-                }
-                if(m_pStaticListener&& m_pStaticfnSelector)
-                    (m_pStaticListener->*m_pStaticfnSelector)(node);
-                onSelectItem(node);
-            }
-        }
-    }
-    
-}
 
 bool TDPanel::procTuiEvent(const string& event,TDPanel* target){
 	bool success = LuaUIManager::instance()->onAssignEvent(this, event.c_str(), target);
@@ -629,34 +588,43 @@ bool TDPanel::procTuiEvent(const string& event,TDPanel* target){
     return true;
 }
 
-void TDPanel::onSelectItem(Ref* pNode){
-    TDButton* button=dynamic_cast<TDButton*>(pNode);
-    if(button){
-        if(button->getEnable()){ 
-            button->selected();
-        }
-        m_pSelectedItem=button;
-    }else{
-		m_pSelectedItem=dynamic_cast<Node*>(pNode);
-		if(m_pListener&& m_pfnSelector)
-			(m_pListener->*m_pfnSelector)(m_pSelectedItem);
 
-        if(m_uListener && func.size() > 0) {
-            LuaUIManager::instance()->onPanelClicked(this, m_uListener, func.c_str());
-        }
-        TDPanel* tipContainer=dynamic_cast<TDPanel*>(pNode);
-        if(tipContainer){
-            tipContainer->selected(); 
-        } 
-    }
+void TDPanel::onPreSelectItem(Node* pNode) {
+	m_pSelectedItem = pNode;
+	TDPanel* tipContainer = dynamic_cast<TDPanel*>(pNode);
+	if (tipContainer) {
+		tipContainer->onPreSelect();
+	}
+}
+
+
+void TDPanel::onSelectItem(Node* pNode) {
+	m_pSelectedItem = pNode;
+	if (m_pListener&& m_pfnSelector)
+		(m_pListener->*m_pfnSelector)(m_pSelectedItem);
+
+	if (m_uListener && func.size() > 0) {
+		LuaUIManager::instance()->onPanelClicked(this, m_uListener, func.c_str());
+	}
+	TDPanel* tipContainer = dynamic_cast<TDPanel*>(pNode);
+	if (tipContainer) {
+		tipContainer->onSelected();
+	}
 }
 
 void TDPanel::onUnSelectItem(Node* pNode){
 	TDPanel* tipContainer = dynamic_cast<TDPanel*>(pNode);
 	if (tipContainer) {
-		tipContainer->unselected();
+		tipContainer->onEndSelect();
 	}
     m_pSelectedItem=NULL;
+}
+
+void TDPanel::onEndSelectItem() {
+	TDPanel* tipContainer = dynamic_cast<TDPanel*>(m_pSelectedItem);
+	if (tipContainer) {
+		tipContainer->onEndSelect();
+	}
 }
 
 void TDPanel::setListner(unsigned int id, string func)
@@ -723,4 +691,3 @@ void TDPanel::registerItem()
 		parent->addItem(this);
 	}
 }
-
