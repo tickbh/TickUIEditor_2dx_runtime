@@ -6,7 +6,6 @@
 #include "TDTab.h"
 #include "TDPage.h"
 #include "TDBar.h"
-#include "TDCount.h"
 #include "TDWin.h"
 #include "TDRichText.h"
 #include "TDCheckBox.h"

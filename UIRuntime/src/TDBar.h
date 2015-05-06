@@ -21,8 +21,8 @@ public:
     
 	virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
     
-	virtual void  afterDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
-	virtual void  beforeDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
+	virtual void  afterDraw();
+	virtual void  beforeDraw();
     void setNum(long lCur,long lMax);
     void setPer(float num);
 	void resetSpriteInfo();
@@ -30,6 +30,10 @@ public:
 protected:
     float m_nPer;
     Sprite* m_pItem;
+
+private:
+	CustomCommand _beforeVisitCmdScissor;
+	CustomCommand _afterVisitCmdScissor;
 };
 
     

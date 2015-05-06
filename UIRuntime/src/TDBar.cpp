@@ -86,18 +86,17 @@ void TDBar::resetSpriteInfo() {
 	if (!m_pItem)
 		return;
 
-	m_pItem->setContentSize(Size(this->getContentSize().width * m_nPer / 100, this->getContentSize().height));
+	//m_pItem->setContentSize(Size(this->getContentSize().width * m_nPer / 100, this->getContentSize().height));
 
 }
 
 
-void TDBar::beforeDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) {
+void TDBar::beforeDraw() {
     glEnable(GL_SCISSOR_TEST);
     if(this->getParent()){
 		Rect rect = getPanelRect(this);
 		Size size=Director::getInstance()->getWinSize();
-		//Point worldPos = convertToWorldSpace(Vec2(rect.origin.x, rect.origin.y));
-		Point worldPos = convertToWorldSpace(Vec2(0, -this->getContentSize().height));
+		Point worldPos = convertToWorldSpace(Vec2::ZERO);
         if(worldPos.x<-getContentSize().width||
            worldPos.y<-getContentSize().height||
            worldPos.x>size.width||
@@ -105,84 +104,77 @@ void TDBar::beforeDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t
            ){
             return;
         }
-		
+		int width = getContentSize().width*(m_nPer / 100.0f)*getScaleX();
 		Director::getInstance()->getOpenGLView()->setScissorInPoints(
                                                           worldPos.x,
                                                           worldPos.y,
-                                                          getContentSize().width*(m_nPer/100.0f)*getScaleX(),
+														  width,
                                                           getContentSize().height
                                                           );
     }
 }
 
-
-void TDBar::afterDraw(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void TDBar::afterDraw()
 {
     glDisable(GL_SCISSOR_TEST);
-    
 }
 
 void TDBar::visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
-	//Node::visit(renderer, parentTransform, parentFlags);
-	//return;
 	// quick return if not visible
 	if (!isVisible())
     {
 		return;
     }
-
-	Director::getInstance()->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	bool enable = Director::getInstance()->getOpenGLView()->isScissorEnabled();
 	
-    //	glPushMatrix();
-	
-    if (m_pGrid && m_pGrid->isActive())
-    {
-        m_pGrid->beforeDraw();
-        //this->transformAncestors();
-    }
-    
-	this->transform(parentTransform);
-	this->beforeDraw(renderer, parentTransform, parentFlags);
-    
-	if (!_children.empty())
-    {
+	_beforeVisitCmdScissor.init(_globalZOrder);
+	_beforeVisitCmdScissor.func = CC_CALLBACK_0(TDBar::beforeDraw, this);
+	renderer->addCommand(&_beforeVisitCmdScissor);
 
-		unsigned int i=0;
-		for (; i < (unsigned int)_children.size(); i++)
-        {
-			Node *child = _children.at(i);
-			if (child->getLocalZOrder() < 0)
-            {
-				child->visit(renderer, parentTransform, parentFlags);
-			}
-            else
-            {
+	Node::visit(renderer, parentTransform, parentFlags);
+
+	_afterVisitCmdScissor.init(_globalZOrder);
+	_afterVisitCmdScissor.func = CC_CALLBACK_0(TDBar::afterDraw, this);
+	renderer->addCommand(&_afterVisitCmdScissor);
+	//beforeDraw();
+	//enable = Director::getInstance()->getOpenGLView()->isScissorEnabled();
+	//Node::visit(renderer, parentTransform, parentFlags);
+	//afterDraw();
+	return;
+	uint32_t flags = processParentFlags(parentTransform, parentFlags);
+
+	// IMPORTANT:
+	// To ease the migration to v3.0, we still support the Mat4 stack,
+	// but it is deprecated and your code should not rely on it
+	_director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	_director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+	beforeDraw();
+	bool visibleByCamera = isVisitableByVisitingCamera();
+
+	int i = 0;
+
+	if (!_children.empty()) {
+		sortAllChildren();
+		// draw children zOrder < 0
+		for (; i < _children.size(); i++) {
+			auto node = _children.at(i);
+
+			if (node && node->getLocalZOrder() < 0)
+				node->visit(renderer, _modelViewTransform, flags);
+			else
 				break;
-            }
 		}
-		
-		// this draw
-		this->draw(renderer, parentTransform, parentFlags);
-		
-		// draw children zOrder >= 0
-		for (; i < (unsigned int)_children.size(); i++)
-        {
-			Node *child = _children.at(i);
-			child->visit(renderer, parentTransform, parentFlags);
-		}
+		// self draw
+		if (visibleByCamera)
+			this->draw(renderer, _modelViewTransform, flags);
+
+		for (auto it = _children.cbegin() + i; it != _children.cend(); ++it)
+			(*it)->visit(renderer, _modelViewTransform, flags);
+	} else if (visibleByCamera) {
+		this->draw(renderer, _modelViewTransform, flags);
 	}
-    else
-    {
-		this->draw(renderer, parentTransform, parentFlags);
-    }
-    
-	this->afterDraw(renderer, parentTransform, parentFlags);
-	if ( m_pGrid && m_pGrid->isActive())
-    {
-		m_pGrid->afterDraw(this);
-    }
-    
-	Director::getInstance()->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	afterDraw();
+	_director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
 }

@@ -9,7 +9,6 @@
 #include "src/TDTab.h"
 #include "src/TDPage.h"
 #include "src/TDBar.h"
-#include "src/TDCount.h"
 #include "src/TDWin.h"
 #include "src/TDScene.h"
 #include "src/TDRichText.h"
