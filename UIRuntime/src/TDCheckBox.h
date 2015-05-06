@@ -4,6 +4,11 @@
 #include "TDMaskPanel.h"
 #include "TDScale9.h"
 
+enum class CheckStatus {
+	Enable,
+	Disable,
+};
+
 class TDCheckBox :public TDPanel{
 public:
     TDCheckBox();
@@ -17,10 +22,21 @@ public:
     
     bool isSelected();
     void setSelected(bool value);
+
+	bool isEnable();
+	void setEnable(bool enable);
+
+	void resetStatus();
 protected:
+	CheckStatus m_eStatus;
     bool m_bSelected;
 
-    TDScale9* m_pBg;
-    Sprite* m_pIcon;
+	Sprite* m_pImgNormalBg;
+	Sprite* m_pImgSelectBg;
+	Sprite* m_pImgDisableBg;
+	Sprite* m_pImgNodeDisable;
+	Sprite* m_pImgNodeNormal;
+
+
 };
 #endif

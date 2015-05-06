@@ -652,18 +652,10 @@ void TDPanel::onSelectItem(Ref* pNode){
 }
 
 void TDPanel::onUnSelectItem(Node* pNode){
-    
-    TDButton* button=dynamic_cast<TDButton*>(pNode);
-    if(button){
-        if(button->getEnable()){
-            button->unselected();
-        }
-    }else{
-        TDPanel* tipContainer=dynamic_cast<TDPanel*>(pNode);
-        if(tipContainer){
-            tipContainer->unselected();
-        }
-    }
+	TDPanel* tipContainer = dynamic_cast<TDPanel*>(pNode);
+	if (tipContainer) {
+		tipContainer->unselected();
+	}
     m_pSelectedItem=NULL;
 }
 

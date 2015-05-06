@@ -8,6 +8,7 @@
 #define T_IMAGE_NAME    "Sprite"
 #define T_PAGE_NAME     "Page"
 #define T_PANEL_NAME    "Panel"
+#define T_CHECKBOX_NAME    "CheckBox"
 #define T_BAR_NAME      "ProgressBar"
 #define T_WIN_NAME      "tdui:TDWin"
 #define T_INPUT_NAME   "Input"

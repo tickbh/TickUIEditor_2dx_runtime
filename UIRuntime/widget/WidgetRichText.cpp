@@ -13,5 +13,7 @@ bool WidgetRichText::parseText() {
 	{
 		
 	}
+	LabelTTF* label =  LabelTTF::create(content, "", defaultConfig.fontSize);
+	this->addChild(label);
 	return true;
 }

@@ -149,6 +149,9 @@ TDPanel* TDUI::createBaseUI(const string& itemName)
 	else if (itemName == T_WIN_NAME) {
 		ret = UIBase::create<TDWin>();
 	}
+	else if (itemName == T_CHECKBOX_NAME) {
+		ret = UIBase::create<TDCheckBox>();
+	}
 	
 	return ret;
 }

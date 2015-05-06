@@ -254,6 +254,9 @@ float TDPage::getPageHeight(){
 
 int TDPage::getTotalPage(){
     int aPage=m_nColNum*m_nRowNum;
+	if (aPage == 0) {
+		return 0;
+	}
     return gTouchItems->count() /aPage;
 }
 

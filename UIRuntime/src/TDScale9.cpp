@@ -5,7 +5,8 @@
 #include "base/CCVector.h"
 #include "base/CCDirector.h"
 
-    
+static const char* defaultImage = "Images/ImageFile.png";
+
 TDScale9::TDScale9()
 {
 	_scale9Sprite = ui::Scale9Sprite::create();
@@ -27,21 +28,27 @@ bool TDScale9::init()
 void TDScale9::initWidthConf( xml_node<> * pItem )
 {
 	string path;
-	readAttrString(pItem, "source", path);
-
-	_scale9Sprite->initWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(path.c_str()));
-	_scale9Sprite->setAnchorPoint(Vec2(0, 0));
-	Size size=readContainSize(pItem,getParent());
-	if(size.width ==-1){
-		size.width=0;
+	readAttrString(pItem, "Image", path);
+	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
+#ifdef ENABLE_DEFAULT_PNG
+	if (frame == nullptr) {
+		frame = UIUtils::getInstance()->spriteFrameByName(defaultImage);
 	}
-	if(size.height==-1){
-		size.height=0;
+#endif
+	if (frame == nullptr)
+		return;
+	_scale9Sprite->initWithSpriteFrame(frame);
+	_scale9Sprite->setAnchorPoint(Vec2(0, 0));
+	Size size = this->getContentSize();
+	if(size.width == 0){
+		size.width = _scale9Sprite->getContentSize().width;
+	}
+	if(size.height == 0){
+		size.height = _scale9Sprite->getContentSize().height;
 	} 
-	this->setPreferredSize(size);
+	this->setContentSize(size);
+	TDPanel::initWidthConf(pItem);
 }
-
-
 
 TDScale9* TDScale9::createWithSpriteFrameName( const std::string& spriteFrameName )
 {

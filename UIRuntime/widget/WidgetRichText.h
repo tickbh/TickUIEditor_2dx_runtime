@@ -32,6 +32,13 @@ static const RichConfig defaultConfig;
 
 class WidgetRichText : public Node {
 public:
+	static WidgetRichText* create(std::string content, RichConfig config = defaultConfig) {
+		WidgetRichText* widget = new WidgetRichText(content, defaultConfig);
+		if (widget) {
+			widget->autorelease();
+		}
+		return widget;
+	}
 	WidgetRichText(std::string content, RichConfig config = defaultConfig)
 	:content(content)
 	, orignConfig(config)

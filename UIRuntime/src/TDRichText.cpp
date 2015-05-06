@@ -110,11 +110,7 @@ bool TDRichText::initWidthFormat( const char* utf8_str, const Size& preferred_si
 	if(utf8_str==NULL){
 		utf8_str="";
 	}
-	//m_pLabel = CCHTMLLabel::createWithString(utf8_str, preferred_size, font_alias);
-	//m_pLabel =  CCHTMLLabel::create();
-	//m_pLabel->setPreferredSize(RSize(preferred_size.width, preferred_size.height));
-	//m_pLabel->setDefaultFontAlias(font_alias);
-	setString(utf8_str);
+	m_pLabel = WidgetRichText::create(utf8_str);
 	if (m_pLabel)
 	{
 		this->addChild(m_pLabel);
