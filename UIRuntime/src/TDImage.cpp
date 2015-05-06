@@ -45,15 +45,14 @@ void TDImage::setSource(const char* path, float customWidth, float customHeight)
 		m_pItem->setScaleY(customHeight * 1.0f / height);
 		height = customHeight;
 	}
-	m_pItem->setPositionY(-height/2);
+	m_pItem->setPositionY(height/2);
     setContentSize(Size(width, height));
 }
 
-void TDImage::initWidthConf(xml_node<> * pItem){
-	TDPanel::initWidthConf(pItem);
+void TDImage::initWidthConf(xml_node<> * pItem) {
     string path;
     readAttrString(pItem, "Image", path);
 	Size size=readContainSize(pItem, getParent());
-    setSource(path.c_str(), size.width, size.height);
-    
+	setSource(path.c_str(), size.width, size.height);
+	TDPanel::initWidthConf(pItem);
 }

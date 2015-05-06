@@ -105,7 +105,7 @@ void TDInput::setString(const char* str)
 }
 
 void TDInput::initWidthConf(xml_node<> * pItem){
-	TDPanel::initWidthConf(pItem);
+	
 	float width, height;
 	int fontSize, maxNum, returnType, inputMode, inputFlag;
 	string color;
@@ -159,5 +159,7 @@ void TDInput::initWidthConf(xml_node<> * pItem){
  
     addChild(m_pEditor);
     m_pEditor->setPositionX(nowWidth/2);
-    m_pEditor->setPositionY(-nowHeight/2);
+    m_pEditor->setPositionY(nowHeight/2);
+
+	TDPanel::initWidthConf(pItem);
 }

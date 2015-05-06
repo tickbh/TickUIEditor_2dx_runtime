@@ -37,6 +37,7 @@ public:
     void loadConf(const string&, Node* parent = NULL);
     void parseConf(xml_node<> * pItem);
     TDPanel* getUI(const string& );
+	virtual void initSizeConf(xml_node<> * pItem);
     virtual void initWidthConf(xml_node<> * pItem);
     virtual bool procTuiEvent(const string&,TDPanel*);
 

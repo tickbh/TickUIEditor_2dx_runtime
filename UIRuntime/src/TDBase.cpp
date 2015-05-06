@@ -78,18 +78,13 @@ void TDPanel::setBottom(float n){
 void TDPanel::setX(float x){
     setPositionX(x);
 }
+
 void TDPanel::setY(float y){
 	if (_parent){
-        setPositionY(_parent->getContentSize().height - y);
-		//setPositionY(_parent->getContentSize().height - y);
-		//setPositionY(-y);
-		//setPositionY(_parent->getContentSize().height - y);
-
+		setPositionY(_parent->getContentSize().height - y);
     } else {
 		setPositionY(y);
 	}
-	//setPositionY(y);
-
 }
 
 
@@ -190,40 +185,18 @@ void TDPanel::loadConf(const string& path, Node* parent /*= NULL*/){
 
 }
 
+void TDPanel::initSizeConf(xml_node<> * pItem) {
+	Size size = readContainSize(pItem, getParent());
+	if (size.width < 0) size.width = getContentSize().width;
+	if (size.height < 0) size.height = getContentSize().height;
+	setContentSize(size);
+}
+
+
 void TDPanel::initWidthConf(xml_node<> * pItem){
     if(!pItem) return;
 
-	xml_attribute<> * pNode = pItem->first_attribute("X");
-	if (pNode) {
-		setX(readAttrFloat(pItem, "X"));
-	}
-	pNode = pItem->first_attribute("Y");
-	if (pNode) {
-		setY(readAttrFloat(pItem, "Y"));
-	}
-
-	pNode = pItem->first_attribute("Right");
-	if (pNode) {
-		setRight(readAttrFloat(pItem, "Right"));
-	}
-
-
-	pNode = pItem->first_attribute("HorizontalCenter");
-	if (pNode) {
-		setHorizontalCenter(readAttrFloat(pItem, "HorizontalCenter"));
-	}
-
-	pNode = pItem->first_attribute("VerticalCenter");
-	if (pNode) {
-		setVerticalCenter(readAttrFloat(pItem, "VerticalCenter"));
-	}
-
-	pNode = pItem->first_attribute("Left");
-	if (pNode) {
-		setLeft(readAttrFloat(pItem, "Left"));
-	}
-
-	pNode = pItem->first_attribute("ScaleX");
+	xml_attribute<> * pNode = pItem->first_attribute("ScaleX");
 	if (pNode) {
 		setScaleX(readAttrFloat(pItem, "ScaleX"));
 	}
@@ -245,7 +218,36 @@ void TDPanel::initWidthConf(xml_node<> * pItem){
 
 	pNode = pItem->first_attribute("AnchorY");
 	if (pNode) {
-		setAnchorPoint(Vec2(getAnchorPoint().x, readAttrFloat(pItem, "AnchorY")));
+		setAnchorPoint(Vec2(getAnchorPoint().x, 1 - readAttrFloat(pItem, "AnchorY")));
+	}
+
+	pNode = pItem->first_attribute("X");
+	if (pNode) {
+		setX(readAttrFloat(pItem, "X"));
+	}
+	pNode = pItem->first_attribute("Y");
+	if (pNode) {
+		setY(readAttrFloat(pItem, "Y"));
+	}
+
+	pNode = pItem->first_attribute("Right");
+	if (pNode) {
+		setRight(readAttrFloat(pItem, "Right"));
+	}
+
+	pNode = pItem->first_attribute("HorizontalCenter");
+	if (pNode) {
+		setHorizontalCenter(readAttrFloat(pItem, "HorizontalCenter"));
+	}
+
+	pNode = pItem->first_attribute("VerticalCenter");
+	if (pNode) {
+		setVerticalCenter(readAttrFloat(pItem, "VerticalCenter"));
+	}
+
+	pNode = pItem->first_attribute("Left");
+	if (pNode) {
+		setLeft(readAttrFloat(pItem, "Left"));
 	}
 
 	pNode = pItem->first_attribute("Top");
@@ -269,11 +271,6 @@ void TDPanel::initWidthConf(xml_node<> * pItem){
 	if (pNode) {
 		setRotationSkewX(readAttrFloat(pItem, "RotationX"));
 	}
-
-    Size size=readContainSize(pItem,getParent());
-    if(size.width < 0) size.width=getContentSize().width; 
-    if(size.height < 0) size.height=getContentSize().height; 
-    setContentSize(size);
     
 	xml_node<> * pChild = pItem->first_node();
 	if (pChild) {
@@ -304,6 +301,7 @@ void TDPanel::parseConf(xml_node<> * pItem){
             if(panel && panel->confPath.size()!=0){
                 panel->loadConf(panel->confPath.c_str());
             }
+			item->initSizeConf(pItem);
 			item->initWidthConf(pItem);
 			LuaUIManager::instance()->initWidthConfByLua(item, pItem);
         }
@@ -733,5 +731,4 @@ void TDPanel::registerItem()
 		parent->addItem(this);
 	}
 }
-
 
