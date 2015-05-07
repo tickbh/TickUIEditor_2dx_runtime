@@ -2,7 +2,7 @@
 #define _UI_BAR_H_
 
 #include "UIBase.h"
-#include "TDBase.h"
+#include "TDPanel.h"
 #include "TDMaskPanel.h"
 
 

@@ -30,9 +30,6 @@
     <ClInclude Include="..\src\TDBar.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TDBase.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\TDButton.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -96,11 +93,11 @@
     <ClInclude Include="..\src\TDMaskPanel.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\TDPanel.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\TDBase.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TDButton.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -153,6 +150,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TDMaskPanel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TDPanel.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

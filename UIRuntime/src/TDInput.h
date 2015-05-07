@@ -2,7 +2,7 @@
 #define _UI_TD_INPUT_H_
 
 #include "UIBase.h"
-#include "TDBase.h"
+#include "TDPanel.h"
 
 class TDInput :public TDPanel, public ui::EditBoxDelegate {
 public:  

@@ -77,11 +77,6 @@ void TDPage::initWidthConf(xml_node<> * pItem){
 	}
     layout();
     this->gotoPage(1);
-
-	//TDScale9* scale = TDScale9::createWithSpriteFrameName("Images/ImageFile.png");
-	//scale->setPreferredSize(this->getContentSize());
-	//addChild(scale); 
-
 	TDPanel::initWidthConf(pItem);
 }
 
@@ -95,22 +90,18 @@ void TDPage::layout(){
         int curPage=i/(m_nColNum*m_nRowNum);
         int curRow=index/m_nColNum;
         int curCol=index%m_nColNum;
-        item->setPositionX(  getPageWidth()* curPage+curCol*(m_nItemWidth+ m_nColDistance)-1);
-        item->setPositionY(curRow*(m_nItemHeight+ m_nRowDistance)+1); 
+        item->setPositionX(getPageWidth()* curPage+curCol*(m_nItemWidth+ m_nColDistance)-1);
+		item->setPositionY((m_nColNum - 1 - curRow)*(m_nItemHeight + m_nRowDistance) + 1);
     } 
 	int onePageNum = m_nColNum  * m_nRowNum;
     m_pContainer->setContentSize(Size(getPageWidth()-m_nColDistance+2,getPageHeight()-m_nRowDistance));
     checkVisible();
 }
 
-
-
 void TDPage::gotoPage(int curPage ){
-    
     if(nCurPage==curPage){
         return;
     }
-   
     if(curPage<1){
         curPage=1; 
     }
@@ -250,5 +241,5 @@ int TDPage::getTotalPage(){
 	if (aPage == 0) {
 		return 0;
 	}
-    return gTouchItems->count() /aPage;
+	return ceilf(gTouchItems->count() * 1.0f / aPage);
 }

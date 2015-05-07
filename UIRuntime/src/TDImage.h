@@ -1,7 +1,7 @@
 #ifndef _UI_TD_IMAGE_H_
 #define _UI_TD_IMAGE_H_
 
-#include "TDBase.h"
+#include "TDPanel.h"
 
 using namespace rapidxml;
 

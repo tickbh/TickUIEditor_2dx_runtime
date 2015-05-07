@@ -2,7 +2,7 @@
 #define _UI_TD_TRICHTEXT_H_
 
 #include "TDScale9.h"
-#include "TDBase.h"
+#include "TDPanel.h"
 #include "widget/WidgetRichText.h"
 
 using namespace rapidxml;

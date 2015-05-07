@@ -1,7 +1,7 @@
 #ifndef _UI_TD_UI_H_
 #define _UI_TD_UI_H_
 
-#include "TDBase.h"
+#include "TDPanel.h"
 
 #define T_BUTTON_NAME   "Button"
 #define T_SCALE9_NAME   "Scale9"

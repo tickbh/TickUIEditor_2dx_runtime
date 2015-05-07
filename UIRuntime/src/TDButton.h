@@ -3,7 +3,7 @@
 
  
 #include "TDScale9.h"
-#include "TDBase.h"
+#include "TDPanel.h"
 
 using namespace rapidxml;
 

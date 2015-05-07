@@ -38,7 +38,6 @@ bool TDWin::onTouchBegan(Touch *pTouch, Event *pEvent){
 
 void TDWin::onTouchMoved(Touch *pTouch, Event *pEvent)
 {
-    
 	TDPanel::onTouchMoved(pTouch, pEvent);
 }
 

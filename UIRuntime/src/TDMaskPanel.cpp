@@ -10,31 +10,30 @@ bool TMaskContainer::init(){
 }
 
 
-
-void TMaskContainer::beforeDraw()
-{
-    glEnable(GL_SCISSOR_TEST);
-    if(this->getParent()){
-        
-        Point worldPos=this->getParent()->convertToWorldSpace(Vec2(0,0-getContentSize().height));
-		Director::getInstance()->getOpenGLView()->setScissorInPoints(
-                                                          worldPos.x,
-                                                          worldPos.y,
-                                                          getContentSize().width,
-                                                          getContentSize().height
-                                                          );
-    }
-    
-    
-} 
-
-
-void TMaskContainer::afterDraw()
-{
-    
-    glDisable(GL_SCISSOR_TEST);
-    
-}
+//
+//void TMaskContainer::beforeDraw()
+//{
+//    glEnable(GL_SCISSOR_TEST);
+//    if(this->getParent()){
+//        Point worldPos=this->getParent()->convertToWorldSpace(Vec2(0,0-getContentSize().height));
+//		Director::getInstance()->getOpenGLView()->setScissorInPoints(
+//                                                          worldPos.x,
+//                                                          worldPos.y,
+//                                                          getContentSize().width,
+//                                                          getContentSize().height
+//                                                          );
+//    }
+//    
+//    
+//} 
+//
+//
+//void TMaskContainer::afterDraw()
+//{
+//    
+//    glDisable(GL_SCISSOR_TEST);
+//    
+//}
 //
 //void TMaskContainer::visit()
 //{
@@ -179,8 +178,8 @@ bool TMaskPanel::onTouchBegan(Touch *pTouch, Event *pEvent){
     
     Point touchLocation = pTouch->getLocation();
     
-    if(touchLocation.y> worldPos.y
-       || touchLocation.y<worldPos.y-m_pContainer->getContentSize().height){
+    if(touchLocation.y< worldPos.y
+       || touchLocation.y>worldPos.y+m_pContainer->getContentSize().height){
         return false;
     }
     
@@ -262,6 +261,20 @@ void TMaskPanel::moveToTop(){
     m_pContainer->setPosition(Point::ZERO);
 }
 
+void TMaskPanel::afterDraw() {
+	TDPanel::afterDraw();
+	glDisable(GL_SCISSOR_TEST);
+}
+
+void TMaskPanel::beforeDraw() {
+	glEnable(GL_SCISSOR_TEST);
+	Size size = Director::getInstance()->getWinSize();
+	auto glview = Director::getInstance()->getOpenGLView();
+	glview->setScissorInPoints(0, 0, size.width, size.height);
+
+	TDPanel::beforeDraw();
+}
+
 /***************************************************
  * TScrollPanel
  **************************************************/
@@ -327,7 +340,6 @@ void TDScrollPanel::initWidthConf(rapidxml::xml_node<> * pItem){
 
 void TDScrollPanel::onTouchMoved(Touch *pTouch, Event *pEvent)
 {
-    
     TDPanel::onTouchMoved(pTouch, pEvent);
     if(m_bIsScroll){
         
@@ -396,4 +408,9 @@ void TDScrollPanel::onTouchEnded(Touch *pTouch, Event *pEvent)
                                                NULL
                                                )
                             );
+}
+
+void TDScrollPanel::onEnter() {
+	TDPanel::onEnter();
+	registerWithTouchDispatcher();
 }

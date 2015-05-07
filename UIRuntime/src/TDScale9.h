@@ -1,7 +1,7 @@
 #ifndef _UI_TD_SCALE9_H_
 #define _UI_TD_SCALE9_H_
 
-#include "TDBase.h"
+#include "TDPanel.h"
 
 class TDScale9 : public TDPanel
 {

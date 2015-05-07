@@ -17,7 +17,6 @@ class TDScale9;
 class TDTab;
 class TDImage;
 class TDScrollPanel;
-class TDCount;
 class TDBar;
 class TDInput;
 class TDCheckBox;
@@ -146,6 +145,9 @@ protected:
 	EventListener* _touchListener;
 	CustomCommand _beforeVisitCmdScissor;
 	CustomCommand _afterVisitCmdScissor;
+
+	Rect _parentScissorRect;
+	bool _scissorRestored;
 };
 
 #endif

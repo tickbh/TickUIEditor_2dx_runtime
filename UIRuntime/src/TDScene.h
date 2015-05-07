@@ -1,7 +1,7 @@
 #ifndef _UI_TD_SCENE_H_
 #define _UI_TD_SCENE_H_
 
-#include "TDBase.h"
+#include "TDPanel.h"
 
 USING_NS_CC;
 

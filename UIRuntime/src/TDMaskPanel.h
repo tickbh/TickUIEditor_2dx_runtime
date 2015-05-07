@@ -2,7 +2,7 @@
 #define _UI_TD_MASKPANEL_H_
 
 
-#include "TDBase.h"
+#include "TDPanel.h"
 
 
 class TMaskContainer :public TDPanel{
@@ -13,11 +13,13 @@ public:
     
     //virtual void visit();
     
-    virtual void  afterDraw();
-    
-    virtual void  beforeDraw();
+    //virtual void  afterDraw();
+    //
+    //virtual void  beforeDraw();
       
-     
+	virtual bool isNeedScissor() override {
+		return false;
+	}
     
 };
 
@@ -29,7 +31,10 @@ class TMaskPanel:public TDPanel{
 public:
     
     TMaskPanel();
-    
+
+	virtual void  afterDraw();
+	virtual void  beforeDraw();
+
     virtual bool init();
     
     virtual bool onTouchBegan(Touch *pTouch, Event *pEvent);
@@ -54,6 +59,10 @@ public:
     
     void checkVisible();
     int renderStartTag;
+
+	virtual bool isNeedScissor() override {
+		return true;
+	}
 };
 
 
@@ -79,9 +88,8 @@ public:
     virtual void addChild(Node * child);
     TDPanel* getItemByTag(int tag);
     
-    virtual void onTouchMoved(Touch *pTouch, Event *pEvent);
-    
-    virtual void onTouchEnded(Touch *pTouch, Event *pEvent);
+    virtual void onTouchMoved(Touch *pTouch, Event *pEvent) override;
+	virtual void onTouchEnded(Touch *pTouch, Event *pEvent) override;
     
     
     DEV_PROPERTY(bool, m_bIsScroll, IsScroll);
@@ -94,6 +102,8 @@ public:
     void moveToBottom();
     void moveToPos(const Point& pos,bool check=false);
     void moveToTop();
+
+	virtual void onEnter();
 protected: 
     bool isCheckBottom;
 

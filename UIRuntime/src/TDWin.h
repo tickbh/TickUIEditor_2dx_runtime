@@ -1,7 +1,7 @@
 #ifndef _UI_TD_WIN_H_
 #define _UI_TD_WIN_H_
 
-#include "TDBase.h"
+#include "TDPanel.h"
 
 USING_NS_CC;
 

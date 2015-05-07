@@ -1,7 +1,7 @@
 #ifndef _UI_TD_TAB_H_
 #define _UI_TD_TAB_H_
 
-#include "TDBase.h"
+#include "TDPanel.h"
 #include "TDButton.h" 
 
 using namespace rapidxml;

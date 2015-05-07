@@ -1,4 +1,4 @@
-#include "TDBase.h"
+#include "TDPanel.h"
 #include "TDScale9.h"
 #include "TDButton.h"
 #include "TDImage.h"
@@ -347,7 +347,6 @@ void TDPanel::registerWithTouchDispatcher()
 		_eventDispatcher->removeEventListener(_touchListener);
 		_touchListener = nullptr;
 	}
-	// Register Touch Event
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(true);
 	listener->onTouchBegan = CC_CALLBACK_2(TDPanel::onTouchBegan, this);
@@ -386,6 +385,7 @@ TDPanel::TDPanel(){
     m_bTouchEnable=true;
     m_uListener = 0;
 	m_pGrid = NULL;
+	_scissorRestored = false;
 }
 
 TDPanel::~TDPanel(){
@@ -709,28 +709,55 @@ void TDPanel::visit(Renderer *renderer, const Mat4& parentTransform, uint32_t pa
 }
 
 void TDPanel::afterDraw() {
-	glDisable(GL_SCISSOR_TEST);
+	if (_scissorRestored) {//restore the parent's scissor rect
+		auto glview = Director::getInstance()->getOpenGLView();
+		glview->setScissorInPoints(_parentScissorRect.origin.x, _parentScissorRect.origin.y, _parentScissorRect.size.width, _parentScissorRect.size.height);
+	} else {
+		glDisable(GL_SCISSOR_TEST);
+	}
 }
 
 void TDPanel::beforeDraw() {
-	glEnable(GL_SCISSOR_TEST);
-	if (this->getParent()) {
-		Rect rect = getPanelRect(this);
-		Size size = Director::getInstance()->getWinSize();
-		Point worldPos = convertToWorldSpace(Vec2::ZERO);
-		if (worldPos.x<-getContentSize().width ||
-			worldPos.y<-getContentSize().height ||
-			worldPos.x>size.width ||
-			worldPos.y>size.height
-			) {
-			return;
+	//if (this->getParent()) {
+	//	Rect rect = getPanelRect(this);
+	//	Size size = Director::getInstance()->getWinSize();
+	//	Point worldPos = convertToWorldSpace(Vec2::ZERO);
+	//	if (worldPos.x<-getContentSize().width ||
+	//		worldPos.y<-getContentSize().height ||
+	//		worldPos.x>size.width ||
+	//		worldPos.y>size.height
+	//		) {
+	//		return;
+	//	}
+	//	Director::getInstance()->getOpenGLView()->setScissorInPoints(
+	//		worldPos.x,
+	//		worldPos.y,
+	//		getContentSize().width * getScaleX(),
+	//		getContentSize().height * getScaleY()
+	//		);
+	//}
+	if (!this->getParent()) {
+		return;
+	}
+
+	Rect frame = getPanelRect(this);
+	auto glview = Director::getInstance()->getOpenGLView();
+
+	if (glview->isScissorEnabled()) {
+		_scissorRestored = true;
+		_parentScissorRect = glview->getScissorRect();
+		//set the intersection of _parentScissorRect and frame as the new scissor rect
+		if (frame.intersectsRect(_parentScissorRect)) {
+			float x = MAX(frame.origin.x, _parentScissorRect.origin.x);
+			float y = MAX(frame.origin.y, _parentScissorRect.origin.y);
+			float xx = MIN(frame.origin.x + frame.size.width, _parentScissorRect.origin.x + _parentScissorRect.size.width);
+			float yy = MIN(frame.origin.y + frame.size.height, _parentScissorRect.origin.y + _parentScissorRect.size.height);
+			glview->setScissorInPoints(x, y, xx - x, yy - y);
 		}
-		Director::getInstance()->getOpenGLView()->setScissorInPoints(
-			worldPos.x,
-			worldPos.y,
-			getContentSize().width * getScaleX(),
-			getContentSize().height * getScaleY()
-			);
+	} else {
+		_scissorRestored = false;
+		glEnable(GL_SCISSOR_TEST);
+		glview->setScissorInPoints(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
 	}
 }
 

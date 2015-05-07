@@ -343,10 +343,28 @@ void setCenterPos(Node* parent, Node* current) {
 }
 
 Rect getPanelRect(Node* pNode) {
-	Rect rect;
-	int width = pNode->getContentSize().width * pNode->getScaleX();
-	int height = pNode->getContentSize().height * pNode->getScaleY();
-	rect.setRect(pNode->getPositionX() - (0.5 - pNode->getAnchorPoint().x) * width,
-		pNode->getPositionY() - (0.5 - pNode->getAnchorPoint().y) * height, width, height);
-	return rect;
+
+	Vec2 screenPos = pNode->convertToWorldSpace(Vec2::ZERO);
+
+	float scaleX = pNode->getScaleX();
+	float scaleY = pNode->getScaleY();
+
+	for (Node *p = pNode->getParent(); p != nullptr; p = p->getParent()) {
+		scaleX *= p->getScaleX();
+		scaleY *= p->getScaleY();
+	}
+
+	// Support negative scaling. Not doing so causes intersectsRect calls
+	// (eg: to check if the touch was within the bounds) to return false.
+	// Note, Node::getScale will assert if X and Y scales are different.
+	if (scaleX < 0.f) {
+		screenPos.x += pNode->getContentSize().width*scaleX;
+		scaleX = -scaleX;
+	}
+	if (scaleY < 0.f) {
+		screenPos.y += pNode->getContentSize().height*scaleY;
+		scaleY = -scaleY;
+	}
+
+	return Rect(screenPos.x, screenPos.y, pNode->getContentSize().width*scaleX, pNode->getContentSize().height*scaleY);
 }
