@@ -53,7 +53,7 @@ void TDPage::initWidthConf(xml_node<> * pItem){
 	m_nRowDistance = readAttrFloat(pItem, "PadRow");
 	m_nColDistance = readAttrFloat(pItem, "PadCol");
     nMaxNum=readAttrInt(pItem, "Max");
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	m_nRowNum = m_nRowNum == 0 ? defaultRow : m_nRowNum;
 	m_nColNum = m_nColNum == 0 ? defaultCol : m_nColNum;
 	m_nRowDistance = fabs(m_nRowDistance) < 0.01 ? defaultPadRow : m_nRowDistance;
@@ -212,7 +212,6 @@ TDPanel* TDPage::getItemByIdx(int idx){
 void TDPage::onTouchEnded(Touch *pTouch, Event *pEvent){
      
     Point curPos (m_pContainer->getPosition().x,m_pContainer->getPosition().y);
-    
     Point touchEndPos= pTouch->getLocation();
 	float distance = (touchEndPos.x - touchStartPos.x);
     if(distance>8){

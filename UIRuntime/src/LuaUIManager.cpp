@@ -1,5 +1,7 @@
 #include "LuaUIManager.h"
 
+#ifdef ENABLE_LUA
+
 extern "C"{
 #include "lua.h"
 #include "lualib.h"
@@ -11,6 +13,8 @@ extern "C"{
 #include "TDUI.h"
 #include "rapidxml/rapidxml_print.hpp"
 #include "CCLuaEngine.h"
+#include "TDPanel.h"
+#include "TDPage.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -243,5 +247,4 @@ void LuaUIManager::registerParseConf(std::string name)
 	_confList.insert(name);
 }
 
-
-
+#endif

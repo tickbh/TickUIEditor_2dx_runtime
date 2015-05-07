@@ -3,7 +3,7 @@
 
 #define DEFAULT_WIDTH 121
 #define DEFAULT_HEIGHT 31 
-#define DEFAULT_FONT_SIZE 12
+#define DEFAULT_FONT_SIZE 18
 const static char* defaultImg = "Images/shurukuang.png";
 
 void TDInput::editBoxEditingDidBegin(ui::EditBox* editBox){
@@ -112,7 +112,7 @@ void TDInput::initWidthConf(xml_node<> * pItem){
 	string text, bg, emptyText;
     width= readAttrFloat(pItem, "Width");
 	height = readAttrFloat(pItem, "Height");
-    fontSize= readAttrInt(pItem, "FontSize");
+	fontSize = readAttrFontSize(pItem, DEFAULT_FONT_SIZE);
 	maxNum = readAttrInt(pItem, "LimitNum");
 	readAttrString(pItem, "Color", color);
 	readAttrString(pItem, "Text", text);
@@ -121,20 +121,17 @@ void TDInput::initWidthConf(xml_node<> * pItem){
 	bool isPassword = readAttrBool(pItem, "IsPassword");
     float nowWidth=DEFAULT_WIDTH;
 	float nowHeight = DEFAULT_HEIGHT;
-    int nowFontSize=DEFAULT_FONT_SIZE; 
     if(width!=0){
         nowWidth=width;
     }
     if(height!=0){
         nowHeight=height;
     }
-    if(fontSize!=0){
-        nowFontSize=fontSize;
-    }
+
     setContentSize(Size(nowWidth, nowHeight));
 	
 	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(bg.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (!frame)
 		frame = UIUtils::getInstance()->spriteFrameByName(defaultImg);
 #endif
@@ -150,7 +147,7 @@ void TDInput::initWidthConf(xml_node<> * pItem){
         int temp=HexToDec(color.c_str());
         m_pEditor->setFontColor(parseRgb(temp));
     }
-    m_pEditor->setFont("Helvetica", nowFontSize);
+	m_pEditor->setFont("Helvetica", fontSize);
     m_pEditor->setMaxLength(maxNum);
 	if (isPassword)
 		m_pEditor->setInputFlag(ui::EditBox::InputFlag::PASSWORD);

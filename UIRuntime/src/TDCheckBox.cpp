@@ -52,7 +52,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
     string path;
     readAttrString(pItem, "ImgNormalBg", path);
 	frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(NormalImgBg);
 	}
@@ -65,7 +65,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 
 	readAttrString(pItem, "ImgSelectBg", path);
 	frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(SelectImgBg);
 	}
@@ -78,7 +78,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 
 	readAttrString(pItem, "ImgDisableBg", path);
 	frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(DisableImgBg);
 	}
@@ -91,7 +91,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 
 	readAttrString(pItem, "ImgNodeDisable", path);
 	frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(NodeDisableImg);
 	}
@@ -104,7 +104,7 @@ void TDCheckBox::initWidthConf(xml_node<> * pItem){
 
 	readAttrString(pItem, "ImgNodeNormal", path);
 	frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(NodeNormalImg);
 	}

@@ -14,7 +14,7 @@ TDImage* TDImage::create(xml_node<> * pItem){
 
 void TDImage::setSource(const char* path, float customWidth, float customHeight){
 	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(path);
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(defaultImage);
 	}

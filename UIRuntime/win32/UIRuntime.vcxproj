@@ -45,7 +45,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)../;$(SolutionDir)../cocos/;$(SolutionDir)../external/;$(SolutionDir)../cocos/platform;$(SolutionDir)../cocos/platform/desktop;$(SolutionDir)../external/glfw3/include/win32;$(SolutionDir)../external/win32-specific/gles/include/OGLES;$(ProjectDir)../include;$(SolutionDir)../extensions;$(ProjectDir)../;$(SolutionDir)../external/lua/tolua;$(SolutionDir)../external/lua/luajit/include;$(SolutionDir)../external/lua;$(SolutionDir)../cocos/scripting/lua-bindings/manual;$(SolutionDir)../cocos/scripting/lua-bindings/auto;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;ENABLE_DEFAULT_PNG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;ENABLE_DEFAULT_UI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4267;4251;4244;4996;4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>

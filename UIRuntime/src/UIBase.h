@@ -86,6 +86,8 @@ unsigned int parseColor(string & color_str, bool* success = NULL);
 bool existAttr(xml_node<> * pItem, const char* cAttr);
 bool readAttrBool(xml_node<> * pItem, const char* cAttr);
 int readAttrInt(xml_node<> * pItem,const char* cAttr);
+int readAttrFontSize(xml_node<> * pItem, int defaultSize = 20);
+
 float readAttrFloat(xml_node<> * pItem,const char* cAttr);
 void readAttrString(xml_node<> * pItem,const char* cAttr, string & ret);
 Size readContainSize(xml_node<> * pItem, Node* parent);

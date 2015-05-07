@@ -9,6 +9,7 @@
 #include "TDBar.h"
 #include "TDCheckBox.h"
 #include "TDAccordion.h"
+#include "TDPage.h"
 #include "rapidxml/rapidxml_print.hpp"
 #include "LuaUIManager.h"
 
@@ -88,10 +89,12 @@ void TDPanel::setY(float y){
 
 
 void TDPanel::onSelected(){
+#ifdef ENABLE_LUA
 	bool control = LuaUIManager::instance()->selected(this->getObjectId());
 	if (control) {
 		return;
 	}
+#endif
 }
 
 void TDPanel::onPreSelect() {
@@ -115,12 +118,16 @@ unsigned int TDPanel::getLuaRefId()
 
 void TDPanel::updateGame( float dt /*= 0.0*/ )
 {
+#ifdef ENABLE_LUA
 	LuaUIManager::instance()->onUpdateGame(this->getObjectId());
+#endif
 }
 
 void TDPanel::update( float fDelta /*= 0.0f*/ )
 {
+#ifdef ENABLE_LUA
 	LuaUIManager::instance()->onUpdateGame(this->getObjectId());
+#endif
 }
 
 
@@ -302,7 +309,9 @@ void TDPanel::parseConf(xml_node<> * pItem){
             }
 			item->initSizeConf(pItem);
 			item->initWidthConf(pItem);
+#ifdef ENABLE_LUA
 			LuaUIManager::instance()->initWidthConfByLua(item, pItem);
+#endif
         }
         pItem=pItem->next_sibling();
         
@@ -324,12 +333,16 @@ void TDPanel::onExit(){
 
 void  TDPanel::onCreateComplete(){
     everyLoad();
+#ifdef ENABLE_LUA
     LuaUIManager::instance()->onCreateComplete(getObjectId());
+#endif
 }
 
 void TDPanel::everyLoad()
 {
-    LuaUIManager::instance()->everyLoad(getObjectId());
+#ifdef ENABLE_LUA
+	LuaUIManager::instance()->everyLoad(getObjectId()); 
+#endif
 }
 
 bool TDPanel::init(){
@@ -392,7 +405,9 @@ TDPanel::~TDPanel(){
     gUIs.clear();
 	gTouchItems->removeAllObjects();
     CC_SAFE_RELEASE_NULL(gTouchItems);
+#ifdef ENABLE_LUA
 	LuaUIManager::instance()->removeObjectId(this->getObjectId());
+#endif
 }
 
 
@@ -574,10 +589,13 @@ Node* TDPanel::getItemByPos(float nX, float nY){
 
 
 bool TDPanel::procTuiEvent(const string& event,TDPanel* target){
-	bool success = LuaUIManager::instance()->onAssignEvent(this, event.c_str(), target);
+	bool success = false;
+#ifdef ENABLE_LUA
+	success = LuaUIManager::instance()->onAssignEvent(this, event.c_str(), target);
 	if (success) {
 		return success;
 	}
+#endif
 	TDPanel* item = dynamic_cast<TDPanel*>(this->getParent());
 	if (item) {
 		success = item->procTuiEvent(event, target);
@@ -601,9 +619,11 @@ void TDPanel::onSelectItem(Node* pNode) {
 	if (m_pListener&& m_pfnSelector)
 		(m_pListener->*m_pfnSelector)(m_pSelectedItem);
 
+#ifdef ENABLE_LUA
 	if (m_uListener && func.size() > 0) {
 		LuaUIManager::instance()->onPanelClicked(this, m_uListener, func.c_str());
 	}
+#endif
 	TDPanel* tipContainer = dynamic_cast<TDPanel*>(pNode);
 	if (tipContainer) {
 		tipContainer->onSelected();

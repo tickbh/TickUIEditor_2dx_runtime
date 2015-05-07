@@ -368,3 +368,12 @@ Rect getPanelRect(Node* pNode) {
 
 	return Rect(screenPos.x, screenPos.y, pNode->getContentSize().width*scaleX, pNode->getContentSize().height*scaleY);
 }
+
+int readAttrFontSize(xml_node<> * pItem, int defaultSize /*= 20*/) {
+	int fontSize = readAttrInt(pItem, "FontSize");
+	if (fontSize == 0)
+		fontSize = defaultSize;
+	else
+		fontSize = fontSize + 10;
+	return fontSize;
+}

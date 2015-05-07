@@ -7,6 +7,9 @@
 #include <map>
 #include <mutex>
 #include <set>
+
+#ifdef ENABLE_LUA
+
 #include "TDPanel.h"
 #include "TDPage.h"
 
@@ -54,5 +57,5 @@ private:
 	std::mutex _mutex;
 	std::set<std::string> _confList;
 };
-
+#endif
 #endif

@@ -49,24 +49,8 @@ void TDWin::onTouchEnded(Touch *pTouch, Event *pEvent)
  
 
 bool TDWin::procTuiEvent(const string& event,TDPanel* target){
-    //if(event=="closeWin"){
-    //    if(this->getParent()){
-    //        this->getParent()->removeChild(this, true);
-    //    }
-    //    return true;
-    //} 
+	cocos2d::log("event no deal with %s", event.c_str());
     return TDPanel::procTuiEvent(event, target);
-}
-
-void TDWin::onShow(){
-	Size parentSize = getParentSize(getParent());
-	//this->setX(parentSize.width/2-getContentSize().width/2);
-	//this->setY(parentSize.height/2-getContentSize().height/2);
-	//this->setReversePosition();
-}
-
-void TDWin::onClose(){
-    
 }
 
 void TDWin::onEnter()

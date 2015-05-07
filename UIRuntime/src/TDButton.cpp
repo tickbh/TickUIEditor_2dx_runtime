@@ -134,10 +134,7 @@ void TDButton::initWidthConf(xml_node<> * pItem){
     string normalLabel, selectLabel,disableLabel;
 	string normalText, selectText, disableText;
 	bool isScale9 = true;
-	int fontSize = readAttrInt(pItem, "FontSize");
-	if (fontSize == 0) {
-		fontSize = 18;
-	}
+	int fontSize = readAttrFontSize(pItem, 24);
 	if (existAttr(pItem, "IsScale9")) {
 		isScale9 = readAttrBool(pItem, "IsScale9");
 	}
@@ -182,19 +179,19 @@ void TDButton::initWidthConf(xml_node<> * pItem){
     }
 	
 	SpriteFrame* normalFrame = UIUtils::getInstance()->spriteFrameByName(normalBg.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (normalFrame == nullptr) {
 		normalFrame = UIUtils::getInstance()->spriteFrameByName(normalImg);
 	}
 #endif
 	SpriteFrame* selectFrame = UIUtils::getInstance()->spriteFrameByName(selectBg.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (normalFrame == nullptr) {
 		normalFrame = UIUtils::getInstance()->spriteFrameByName(selectImg);
 	}
 #endif
 	SpriteFrame* disableFrame = UIUtils::getInstance()->spriteFrameByName(disableBg.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (normalFrame == nullptr) {
 		normalFrame = UIUtils::getInstance()->spriteFrameByName(disableImg);
 	}

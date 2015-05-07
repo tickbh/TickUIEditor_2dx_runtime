@@ -48,20 +48,16 @@ void TDRichText::initWidthConf( xml_node<> * pItem )
 {
 	string color;
 	readAttrString(pItem, "Color", color);
-	int fontSize = readAttrInt(pItem, "FontSize");
+	int fontSize = readAttrFontSize(pItem, 18);
 	string text;
 	readAttrString(pItem, "Text", text);
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (text.empty())
 		text = defaultText;
 #endif
 
 	string font;
 	readAttrString(pItem, "font", font);
-
-	if(fontSize==0){
-		fontSize = 18;
-	}
 
 	Size size = this->getContentSize();
 	initWidthFormat(text.c_str(), size, font.c_str());
@@ -122,8 +118,8 @@ std::string TDRichText::getString()
 
 void TDRichText::setColor( const Color3B& color )
 {
-	int iColor = (color.r << 16) + (color.g << 8) + color.b;
-	//m_pLabel->setDefaultColor(iColor);
+	if (m_pLabel)
+		m_pLabel->setColor(color);
 }
 
 WidgetRichText* TDRichText::getRichLabel()
@@ -133,14 +129,7 @@ WidgetRichText* TDRichText::getRichLabel()
 
 void TDRichText::setFontSize( int size )
 {
-	//string defaultFontAlias = getRichLabel()->getDefaultFontAlias();
-	//static const char* number = "0123456789";
-	//int pos = defaultFontAlias.find_first_of(number);
-	//if(pos != string::npos) {
-	//	defaultFontAlias = CCString::createWithFormat("%s%d", defaultFontAlias.substr(0, pos).c_str(), size)->getCString();
-	//} else {
-	//	defaultFontAlias = CCString::createWithFormat("%s%d", defaultFontAlias.c_str(), size)->getCString();
-	//}
-	//getRichLabel()->setDefaultFontAlias(defaultFontAlias.c_str());
+	if (m_pLabel)
+		m_pLabel->setFontSize(size);
 }
 

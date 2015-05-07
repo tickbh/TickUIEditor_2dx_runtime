@@ -21,7 +21,7 @@ TDBar::~TDBar(){
 
 void TDBar::setSource(const char* path, Size contentSize/* = Size::ZERO*/) {
 	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(path);
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(defaultImage);
 	}

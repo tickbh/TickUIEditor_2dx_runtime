@@ -17,7 +17,6 @@ public:
     static TDPage*  create(xml_node<> * pItem); 
     virtual void  initWidthConf(xml_node<> * pItem); 
     
-    
     virtual void onTouchMoved(Touch *pTouch, Event *pEvent) override;
 	virtual void onTouchEnded(Touch *pTouch, Event *pEvent) override;
     

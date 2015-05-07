@@ -33,7 +33,8 @@ bool WidgetRichText::parseText() {
 		}
 		if (searchPos - i > 1)
 			parseConfig(content.substr(i + 1, searchPos - i - 1), orignConfig, curConfig);
-		i = pre = searchPos + 1;
+		i = searchPos;
+		pre = searchPos + 1;
 		inSerch = false;
 	}
 	if (!inSerch) {

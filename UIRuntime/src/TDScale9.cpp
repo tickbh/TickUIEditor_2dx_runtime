@@ -25,7 +25,7 @@ void TDScale9::initWidthConf( xml_node<> * pItem )
 	string path;
 	readAttrString(pItem, "Image", path);
 	SpriteFrame* frame = UIUtils::getInstance()->spriteFrameByName(path.c_str());
-#ifdef ENABLE_DEFAULT_PNG
+#ifdef ENABLE_DEFAULT_UI
 	if (frame == nullptr) {
 		frame = UIUtils::getInstance()->spriteFrameByName(defaultImage);
 	}

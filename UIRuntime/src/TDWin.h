@@ -19,14 +19,10 @@ public:
     
 	virtual void onTouchEnded(Touch *pTouch, Event *pEvent);
     
-    virtual void onShow(); 
 
 	virtual void onEnter();
     
-    virtual void onClose();
-    
     virtual void onRefresh(){}
-
     
 	int getWinID() { return m_nWinID; }
     
