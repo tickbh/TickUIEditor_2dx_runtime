@@ -81,7 +81,7 @@ void splitStr(vector<string> &gRet, string cStr ,const char* cSplit );
 
 int HexToDec(const char *s);
 int to_hex_value(unsigned short c);
-unsigned int parseColor(string & color_str);
+unsigned int parseColor(string & color_str, bool* success = NULL);
 
 bool existAttr(xml_node<> * pItem, const char* cAttr);
 bool readAttrBool(xml_node<> * pItem, const char* cAttr);

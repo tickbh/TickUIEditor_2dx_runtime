@@ -99,7 +99,7 @@ int to_hex_value(unsigned short c)
 }
 
 
-unsigned int parseColor(string & color_str)
+unsigned int parseColor(string & color_str, bool* success/* = NULL*/)
 {
 	unsigned int color = 0;
 	if (!color_str.empty())
@@ -120,6 +120,9 @@ unsigned int parseColor(string & color_str)
 			for (size_t i = 1; i < color_str.size() - 1; i += 2) {
 				color = (color << 4) + to_hex_value(color_str[i]);
 				color = (color << 4) + to_hex_value(color_str[i + 1]);
+			}
+			if (success) {
+				*success = true;
 			}
 		}
 	}

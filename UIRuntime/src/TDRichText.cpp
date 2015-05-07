@@ -71,6 +71,7 @@ void TDRichText::initWidthConf( xml_node<> * pItem )
 	}
 	m_pLabel->setFontSize(fontSize);
 	m_pLabel->setContentSize(size);
+	setCenterPos(this, m_pLabel);
 	TDPanel::initWidthConf(pItem);
 }
 
