@@ -153,7 +153,7 @@ void TDInput::initWidthConf(xml_node<> * pItem){
 		m_pEditor->setInputFlag(ui::EditBox::InputFlag::PASSWORD);
     //m_pEditor->setInputMode(getInputMode(inputMode));
     //m_pEditor->setReturnType(getInputReturnType(returnType));
- 
+	m_pEditor->setText(text.c_str());
     addChild(m_pEditor);
     m_pEditor->setPositionX(nowWidth/2);
     m_pEditor->setPositionY(nowHeight/2);

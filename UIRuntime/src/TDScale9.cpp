@@ -7,18 +7,6 @@ TDScale9::TDScale9()
 	_scale9Sprite = ui::Scale9Sprite::create();
 	this->addChild(_scale9Sprite);
 }
-    
-TDScale9::~TDScale9()
-{
-
-}
-
-bool TDScale9::init()
-{
-	return TDPanel::init();
-}
-
-
 
 void TDScale9::initWidthConf( xml_node<> * pItem )
 {
@@ -85,10 +73,4 @@ TDScale9* TDScale9::create( const std::string& file )
 	}
 	CC_SAFE_DELETE(pReturn);
 	return NULL;
-}
-
-void TDScale9::onEnter()
-{
-	CCNode::onEnter();
-	cocos2d::log("TDScale9::onEnter");
 }
