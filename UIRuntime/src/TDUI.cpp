@@ -52,9 +52,11 @@ TDPanel* TDUI::createUI(xml_node<> * pItem){
 	if (name.size() != 0) {
 		itemName = name;
     }
+	string path;
+	readAttrString(pItem, "Path", path);
     TDPanel* ret=createUI(itemName);
-    
     if(ret){
+		ret->confPath = path;
         ret->tName=itemName;
 		ret->loadProp(pItem);
     }

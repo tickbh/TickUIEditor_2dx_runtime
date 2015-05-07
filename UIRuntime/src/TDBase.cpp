@@ -297,9 +297,8 @@ void TDPanel::parseConf(xml_node<> * pItem){
             if(id.size()>0) {
 				this->gUIs.insert(pair<string, TDPanel*>(id, item));
 			}
-            TDPanel* panel=dynamic_cast<TDPanel*>(item);
-            if(panel && panel->confPath.size()!=0){
-                panel->loadConf(panel->confPath.c_str());
+			if (item->tName == "Panel" && item->confPath.size() != 0) {
+				item->loadConf(item->confPath.c_str());
             }
 			item->initSizeConf(pItem);
 			item->initWidthConf(pItem);
@@ -689,4 +688,52 @@ void TDPanel::registerItem()
 	if (parent) {
 		parent->addItem(this);
 	}
+}
+
+void TDPanel::visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) {
+	if (!isVisible()) {
+		return;
+	}
+	if (isNeedScissor()) {
+		_beforeVisitCmdScissor.init(_globalZOrder);
+		_beforeVisitCmdScissor.func = CC_CALLBACK_0(TDPanel::beforeDraw, this);
+		renderer->addCommand(&_beforeVisitCmdScissor);
+	}
+
+	Node::visit(renderer, parentTransform, parentFlags);
+	if (isNeedScissor()) {
+		_afterVisitCmdScissor.init(_globalZOrder);
+		_afterVisitCmdScissor.func = CC_CALLBACK_0(TDPanel::afterDraw, this);
+		renderer->addCommand(&_afterVisitCmdScissor);
+	}
+}
+
+void TDPanel::afterDraw() {
+	glDisable(GL_SCISSOR_TEST);
+}
+
+void TDPanel::beforeDraw() {
+	glEnable(GL_SCISSOR_TEST);
+	if (this->getParent()) {
+		Rect rect = getPanelRect(this);
+		Size size = Director::getInstance()->getWinSize();
+		Point worldPos = convertToWorldSpace(Vec2::ZERO);
+		if (worldPos.x<-getContentSize().width ||
+			worldPos.y<-getContentSize().height ||
+			worldPos.x>size.width ||
+			worldPos.y>size.height
+			) {
+			return;
+		}
+		Director::getInstance()->getOpenGLView()->setScissorInPoints(
+			worldPos.x,
+			worldPos.y,
+			getContentSize().width * getScaleX(),
+			getContentSize().height * getScaleY()
+			);
+	}
+}
+
+bool TDPanel::isNeedScissor() {
+	return this->tName == "Panel";
 }

@@ -75,6 +75,7 @@ public:
 	virtual void updateDisplayedOpacity(GLubyte parentOpacity);
 
     virtual  void clearItems();
+	virtual bool isNeedScissor();
     __Array* getItems(){return  gTouchItems;}
     Node* getSelectedItem(){return  m_pSelectedItem;}
     int getSelectedIndex();
@@ -125,6 +126,10 @@ public:
 	string tEvent;
 	
 protected:
+	virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+	virtual void  afterDraw();
+	virtual void  beforeDraw();
+
 	GridBase *m_pGrid;                ///< a grid
 
     static  Ref*     m_pStaticListener;
@@ -139,7 +144,8 @@ protected:
     Point touchMovePos;
 	__Array* gTouchItems;
 	EventListener* _touchListener;
-    
+	CustomCommand _beforeVisitCmdScissor;
+	CustomCommand _afterVisitCmdScissor;
 };
 
 #endif

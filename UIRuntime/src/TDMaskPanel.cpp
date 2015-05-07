@@ -131,7 +131,7 @@ void TMaskPanel::checkVisible(){
     
     int visibleNum=0;
     Point curPos  = m_pContainer->getPosition();
-    float startX=   - curPos.x;
+    float startX=   -curPos.x;
 	float startY = -curPos.y;
     
     renderStartTag=0;
@@ -139,9 +139,9 @@ void TMaskPanel::checkVisible(){
         TDPanel* item=(TDPanel*)gTouchItems->getObjectAtIndex(i);
         
         if(item->getPositionX()+item->getContentSize().width<startX ||
-           item->getPositionY()-item->getContentSize().height>startY ||
+           item->getPositionY()+item->getContentSize().height<startY ||
            item->getPositionX()-item->getContentSize().width>startX+m_pContainer->getContentSize().width ||
-           item->getPositionY()+item->getContentSize().height<startY-m_pContainer->getContentSize().height )
+           item->getPositionY()-item->getContentSize().height>startY+m_pContainer->getContentSize().height )
         {
             item->setVisible(false);
         }else{

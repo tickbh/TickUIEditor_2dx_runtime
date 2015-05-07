@@ -2,11 +2,16 @@
 #include "TDUI.h"
 #include "LuaUIManager.h"
 
+const int defaultMax = 9;
+const int defaultCol = 3;
+const int defaultRow = 3;
+const int defaultPadCol = 3;
+const int defaultPadRow = 3;
+
 TDPage::TDPage(){
     m_pLeftPanel=NULL;
     m_pRightPanel=NULL;
     m_pPageTxt=NULL; 
-    m_pBarContainer=NULL;
 }
 
 bool TDPage::init(){
@@ -23,14 +28,11 @@ void TDPage::clearItems(){
     gotoPage(1);
 }
 
-
-
 TDPage* TDPage::create(xml_node<> * pItem){
 	TDPage*  ret = UIBase::create<TDPage>();
     ret->initWidthConf(pItem);
     return ret;
 }
-
 
 void TDPage::initWidthConf(xml_node<> * pItem){
     
@@ -39,40 +41,48 @@ void TDPage::initWidthConf(xml_node<> * pItem){
     }
     
     string scrollDir;
-    readAttrString(pItem, "itemName", itemName);
     readAttrString(pItem, "scrollDir", scrollDir);
-    
     if(scrollDir=="V"){
         setDirection(TScrollV);
     }else{
         setDirection(TScrollH);
     }
     
-    m_nRowNum =readAttrInt(pItem, "row");
-    m_nColNum=readAttrInt(pItem, "col");
-	m_nRowDistance = readAttrFloat(pItem, "rowDis");
-	m_nColDistance = readAttrFloat(pItem, "colDis");
-    nMaxNum=readAttrInt(pItem, "maxNum");
-    hasPageBar=readAttrBool(pItem, "hasPageBar");
+    m_nRowNum =readAttrInt(pItem, "Row");
+    m_nColNum=readAttrInt(pItem, "Col");
+	m_nRowDistance = readAttrFloat(pItem, "PadRow");
+	m_nColDistance = readAttrFloat(pItem, "PadCol");
+    nMaxNum=readAttrInt(pItem, "Max");
+#ifdef ENABLE_DEFAULT_PNG
+	m_nRowNum = m_nRowNum == 0 ? defaultRow : m_nRowNum;
+	m_nColNum = m_nColNum == 0 ? defaultCol : m_nColNum;
+	m_nRowDistance = fabs(m_nRowDistance) < 0.01 ? defaultPadRow : m_nRowDistance;
+	m_nColDistance = fabs(m_nColDistance) < 0.01 ? defaultPadCol : m_nColDistance;
+	nMaxNum = nMaxNum == 0 ? defaultMax : nMaxNum;
+#endif
 
-    for(int i=0;i<nMaxNum;i++){ 
-        TDPanel* item=TDUI::instance()->createUI(itemName);
-        addChildItem(item); 
-        TDPanel* panel=dynamic_cast<TDPanel*>(item);
-        if(panel && panel->confPath.size()!=0){
-            panel->loadConf(panel->confPath.c_str());
-        }
-        item->setTag(i+1);
-        m_nItemWidth=item->getContentSize().width;
-        m_nItemHeight=item->getContentSize().height;
-    }
-
+	m_RenderItem = pItem->first_node("RenderItem");
+	if (m_RenderItem) {
+		for (int i = 0; i < nMaxNum; i++) {
+			TDPanel* item = TDUI::instance()->createUI(m_RenderItem);
+			addChildItem(item);
+			TDPanel* panel = dynamic_cast<TDPanel*>(item);
+			if (panel && panel->confPath.size() != 0) {
+				panel->loadConf(panel->confPath.c_str());
+			}
+			item->setTag(i + 1);
+			m_nItemWidth = item->getContentSize().width;
+			m_nItemHeight = item->getContentSize().height;
+		}
+	}
     layout();
-
-	//if(hasPageBar) {
-	//	m_pBarContainer = LuaUIManager::instance()->createPageBar(this, getTotalPage());
-	//}
     this->gotoPage(1);
+
+	//TDScale9* scale = TDScale9::createWithSpriteFrameName("Images/ImageFile.png");
+	//scale->setPreferredSize(this->getContentSize());
+	//addChild(scale); 
+
+	TDPanel::initWidthConf(pItem);
 }
 
 void TDPage::layout(){
@@ -86,13 +96,10 @@ void TDPage::layout(){
         int curRow=index/m_nColNum;
         int curCol=index%m_nColNum;
         item->setPositionX(  getPageWidth()* curPage+curCol*(m_nItemWidth+ m_nColDistance)-1);
-        item->setPositionY(-curRow*(m_nItemHeight+ m_nRowDistance)-1); 
+        item->setPositionY(curRow*(m_nItemHeight+ m_nRowDistance)+1); 
     } 
 	int onePageNum = m_nColNum  * m_nRowNum;
     m_pContainer->setContentSize(Size(getPageWidth()-m_nColDistance+2,getPageHeight()-m_nRowDistance));
-    if(m_pBarContainer) {
-		m_pBarContainer->setContentSize(Size(getPageWidth() - m_nColDistance + 2, 10));
-	}
     checkVisible();
 }
 
@@ -147,10 +154,7 @@ void TDPage::gotoPage(int curPage ){
       
     }
     
-    
-    
     nCurPage=curPage;
-    
     m_pContainer->stopAllActions();
     m_pContainer->runAction(
                             Sequence::create(
@@ -172,34 +176,28 @@ void TDPage::gotoPage(int curPage ){
         m_pPageTxt->setString(temp);
     }
     
-    if(m_pBarContainer){
-		LuaUIManager::instance()->pageChanged(m_pBarContainer, nCurPage);
-		LuaUIManager::instance()->changePageNum(this, m_pBarContainer, getTotalPage());
-    }
-    
+
 }
-
-
 
 void TDPage::onPageEnd(){
     checkVisible();
-   
 }
 
 void TDPage::onTouchMoved(Touch *pTouch, Event *pEvent){
     TDScrollPanel::onTouchMoved(pTouch, pEvent);
-    
-    
 }
 
 TDPanel* TDPage::ensureItemByIdx( int idx )
 {
 	TDPanel* item = (TDPanel*)m_pContainer->getChildByTag(idx);
-	if(item != NULL) {
+	if (item != nullptr) {
 		return item;
 	}
+	if (m_RenderItem == nullptr) {
+		return nullptr;
+	}
 	for(int i=nMaxNum;i<idx;i++){ 
-		TDPanel* item=TDUI::instance()->createUI(itemName);
+		TDPanel* item = TDUI::instance()->createUI(m_RenderItem);
 		addChildItem(item); 
 		TDPanel* panel=dynamic_cast<TDPanel*>(item);
 		if(panel && panel->confPath.size()!=0){
@@ -224,12 +222,8 @@ void TDPage::onTouchEnded(Touch *pTouch, Event *pEvent){
      
     Point curPos (m_pContainer->getPosition().x,m_pContainer->getPosition().y);
     
-    
     Point touchEndPos= pTouch->getLocation();
-    
 	float distance = (touchEndPos.x - touchStartPos.x);
-    
-    
     if(distance>8){
         gotoPage(nCurPage-1);
     }else if(distance<-8){
@@ -239,7 +233,6 @@ void TDPage::onTouchEnded(Touch *pTouch, Event *pEvent){
         gotoPage(nCurPage);
         TDPanel::onTouchEnded(pTouch, pEvent);
     }
-    
     
 }
 
@@ -258,18 +251,4 @@ int TDPage::getTotalPage(){
 		return 0;
 	}
     return gTouchItems->count() /aPage;
-}
-
-void TDPage::setBarContainer( TDPanel* m_pBarContainer )
-{
-	this->m_pBarContainer = m_pBarContainer;
-	if(this->m_pBarContainer) {
-		LuaUIManager::instance()->pageChanged(m_pBarContainer, nCurPage);
-		LuaUIManager::instance()->changePageNum(this, m_pBarContainer, getTotalPage());
-	}
-}
-
-TDPanel* TDPage::getBarContainer()
-{
-	return this->m_pBarContainer;
 }

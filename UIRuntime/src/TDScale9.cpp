@@ -47,10 +47,16 @@ void TDScale9::initWidthConf( xml_node<> * pItem )
 
 TDScale9* TDScale9::createWithSpriteFrameName( const std::string& spriteFrameName )
 {
+	return createWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(spriteFrameName.c_str()));
+}
+
+TDScale9* TDScale9::createWithSpriteFrame(SpriteFrame* frame) {
+	if (frame == nullptr) {
+		return nullptr;
+	}
 	TDScale9* pReturn = new (std::nothrow) TDScale9();
-	if ( pReturn && pReturn->_scale9Sprite->initWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(spriteFrameName.c_str())))
-	{
-		 pReturn->_scale9Sprite->setAnchorPoint(Vec2(0, 0));
+	if (pReturn && pReturn->_scale9Sprite->initWithSpriteFrame(frame)) {
+		pReturn->_scale9Sprite->setAnchorPoint(Vec2(0, 0));
 		pReturn->setContentSize(pReturn->_scale9Sprite->getContentSize());
 		pReturn->autorelease();
 		return pReturn;
@@ -59,6 +65,7 @@ TDScale9* TDScale9::createWithSpriteFrameName( const std::string& spriteFrameNam
 	log("Could not allocate TDScale9()");
 	return NULL;
 }
+
 
 void TDScale9::setPreferredSize( const Size& size )
 {

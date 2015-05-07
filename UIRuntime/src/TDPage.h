@@ -35,9 +35,6 @@ public:
     DEV_PROPERTY(TDPanel*, m_pLeftPanel, LeftPanel);
     DEV_PROPERTY(TDPanel*, m_pRightPanel, RightPanel);
     DEV_PROPERTY(TDRichText*, m_pPageTxt,  PageTxt);
-	TDPanel* m_pBarContainer;
-	void setBarContainer(TDPanel* m_pBarContainer);
-	TDPanel* getBarContainer();
 protected:
     
     int m_nRowNum;
@@ -51,8 +48,7 @@ protected:
     void onPageEnd(); 
     float getPageWidth(); 
     float getPageHeight();
-    string itemName;
-    
+	xml_node<> * m_RenderItem;
 };
 
 

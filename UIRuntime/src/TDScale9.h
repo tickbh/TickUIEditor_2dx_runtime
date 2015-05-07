@@ -14,6 +14,7 @@ public:
 	virtual void  initWidthConf(xml_node<> * pItem);
 
 	static TDScale9* createWithSpriteFrameName(const std::string& spriteFrameName);
+	static TDScale9* createWithSpriteFrame(SpriteFrame* frame);
 	static TDScale9* create(const std::string& file);
 
 	void setPreferredSize(const Size& size);

@@ -101,7 +101,6 @@ Point  getPosInTarget(Point point, Node* pTarget);
 
 string  parseString(float i); 
 string parseString(int i); 
-long getTimer();
 
 #endif
 

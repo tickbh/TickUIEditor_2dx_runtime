@@ -180,25 +180,42 @@ void TDButton::initWidthConf(xml_node<> * pItem){
         m_pDisableLabel=Sprite::createWithSpriteFrameName(disableLabel.c_str());
 		m_pDisableLabel->setAnchorPoint(Vec2(anchor, anchor));
     }
+	
+	SpriteFrame* normalFrame = UIUtils::getInstance()->spriteFrameByName(normalBg.c_str());
+#ifdef ENABLE_DEFAULT_PNG
+	if (normalFrame == nullptr) {
+		normalFrame = UIUtils::getInstance()->spriteFrameByName(normalImg);
+	}
+#endif
+	SpriteFrame* selectFrame = UIUtils::getInstance()->spriteFrameByName(selectBg.c_str());
+#ifdef ENABLE_DEFAULT_PNG
+	if (normalFrame == nullptr) {
+		normalFrame = UIUtils::getInstance()->spriteFrameByName(selectImg);
+	}
+#endif
+	SpriteFrame* disableFrame = UIUtils::getInstance()->spriteFrameByName(disableBg.c_str());
+#ifdef ENABLE_DEFAULT_PNG
+	if (normalFrame == nullptr) {
+		normalFrame = UIUtils::getInstance()->spriteFrameByName(disableImg);
+	}
+#endif
 	Size contentSize = this->getContentSize();
     anchor = 0;
     if(!isScale9){
-        m_pNormalBg=Sprite::createWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(normalBg.c_str()));
-        m_pSelectBg=Sprite::createWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(selectBg.c_str()));
-        m_pDisableBg=Sprite::createWithSpriteFrame(UIUtils::getInstance()->spriteFrameByName(disableBg.c_str()));
-        m_pNormalBg->setAnchorPoint(Vec2(anchor, anchor));
-		m_pSelectBg->setAnchorPoint(Vec2(anchor, anchor));
-		m_pDisableBg->setAnchorPoint(Vec2(anchor, anchor));
-        if (m_pNormalBg && contentSize.equals(Size::ZERO)) { 
-            setContentSize(m_pNormalBg->getContentSize());
-        }
+		if (normalFrame)
+			m_pNormalBg = Sprite::createWithSpriteFrame(normalFrame);
+		if (selectFrame)
+			m_pSelectBg=Sprite::createWithSpriteFrame(selectFrame);
+		if (disableFrame)
+			m_pDisableBg=Sprite::createWithSpriteFrame(disableFrame);
+		if (m_pNormalBg && contentSize.equals(Size::ZERO)) {
+			setContentSize(m_pNormalBg->getContentSize());
+		}
+
     }else{
-        m_pNormalBg=TDScale9::create(normalBg.c_str());
-        m_pSelectBg=TDScale9::create(selectBg.c_str());
-        m_pDisableBg=TDScale9::create(disableBg.c_str());
-		m_pNormalBg->setAnchorPoint(Vec2(anchor, anchor));
-		m_pSelectBg->setAnchorPoint(Vec2(anchor, anchor));
-		m_pDisableBg->setAnchorPoint(Vec2(anchor, anchor));
+		m_pNormalBg=TDScale9::createWithSpriteFrame(normalFrame);
+		m_pSelectBg = TDScale9::createWithSpriteFrame(selectFrame);
+		m_pDisableBg = TDScale9::createWithSpriteFrame(disableFrame);
 		float nowWidth = 0;
 		float nowHeight = 0;
         if(m_pNormalBg) {
@@ -226,6 +243,9 @@ void TDButton::initWidthConf(xml_node<> * pItem){
             ((TDScale9*)m_pDisableBg)->setPreferredSize(Size(nowWidth, nowHeight));
         }
     }
+	setCenterPos(this, m_pNormalBg);
+	setCenterPos(this, m_pSelectBg);
+	setCenterPos(this, m_pDisableBg);
 
 	contentSize = this->getContentSize();
 	m_pDisableText = LabelTTF::create(disableText, "", fontSize, contentSize, TextHAlignment::CENTER, TextVAlignment::CENTER);

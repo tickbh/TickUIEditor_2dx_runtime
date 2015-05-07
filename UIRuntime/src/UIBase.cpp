@@ -333,14 +333,6 @@ std::string parseString( int i )
 	return oss.str();
 }
 
-long getTimer()
-{
-	//struct cc_timeval now;
-	//CCTime::gettimeofdayCocos2d(&now, NULL);
-	//long a=now.tv_sec%100000;
-	//return (a * 1000 + now.tv_usec / 1000);
-	return 0;
-}
 
 void setCenterPos(Node* parent, Node* current) {
 	if (!current || !parent)

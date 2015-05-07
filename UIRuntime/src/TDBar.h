@@ -19,8 +19,7 @@ public:
     static TDBar* create(xml_node<> * pItem);
     virtual  void initWidthConf(xml_node<> * pItem);
     
-	virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    
+	virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 	virtual void  afterDraw();
 	virtual void  beforeDraw();
     void setNum(long lCur,long lMax);
@@ -31,9 +30,6 @@ protected:
     float m_nPer;
     Sprite* m_pItem;
 
-private:
-	CustomCommand _beforeVisitCmdScissor;
-	CustomCommand _afterVisitCmdScissor;
 };
 
     
